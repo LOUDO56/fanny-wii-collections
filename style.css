@@ -17,6 +17,19 @@ main {
 }
   
 
+.img-left{
+    position: fixed;
+    top: -5px;
+    left: 0;
+}
+
+.img-right{
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+
 
 
 
@@ -106,6 +119,26 @@ header{
 .game-title{
     font-size: 21px;
     font-weight: bold;
+}
+
+ /* .game-synopsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+} */
+
+.read-more{
+    border: none;
+    background-color: #F8F8F8;
+    color: rgb(29, 107, 143);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.game-synopsis.truncated {
+    content: "...";
 }
 
 .game-is-owned{
