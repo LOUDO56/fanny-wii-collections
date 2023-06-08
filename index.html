@@ -9,7 +9,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;1,700&display=swap" rel="stylesheet">
-        <title>Collection Wii Fanny</title>
+        <link rel="icon" href="Img/wii_logo.png" type="image/icon type">
+        <title>Collection Jeu Wii Fanny</title>
     </head>
     <body>
         <header>
@@ -28,6 +29,7 @@
                     <option value="games-not-owned">Jeux non possédés</option>
                 </select>
             </div>
+            <div id="page-indicator"></div>
             <div class="games-list" wii-games-container></div>
             <template wii-games-template>
                 <div class="game-box">
@@ -61,7 +63,8 @@
                     </div>
                 </div>
             </template>
-            
+            <button id="next-page">Page suivante</button>
+            <button id="previous-page">Page précedente</button>
         </main>
     </body>
 </html>
