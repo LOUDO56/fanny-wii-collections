@@ -100,9 +100,6 @@ header{
 
 
 .game-information{
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
     width: 100%;
 }
 
@@ -110,13 +107,10 @@ header{
 .game-information-header{
     display: flex;
     justify-content: space-between;
+    margin-bottom: 10px;
 }
 
-.game-information-body{
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-}
+
 
 .game-title{
     font-size: 21px;
