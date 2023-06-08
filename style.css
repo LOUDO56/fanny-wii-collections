@@ -136,6 +136,12 @@ header{
     color: rgb(29, 107, 143);
     text-decoration: underline;
     cursor: pointer;
+    font-size: 15px;
+    display: none;
+}
+
+.read-more:hover{
+    text-decoration: none;
 }
 
 .game-synopsis.truncated {
