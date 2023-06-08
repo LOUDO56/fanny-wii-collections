@@ -103,6 +103,7 @@ header{
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 }
 
 
@@ -129,6 +130,7 @@ header{
     -webkit-line-clamp: 7;
     -webkit-box-orient: vertical;*/
     white-space: pre-line;
+    width: 100%;
 
 }
 
@@ -174,7 +176,6 @@ header{
 .game-little-info{
     display: flex;
     gap: 40px;
-    flex-wrap: wrap;
 }
 
 .game-little-info p:last-child{
