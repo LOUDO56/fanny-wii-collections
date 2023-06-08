@@ -253,7 +253,7 @@ header{
     .game-little-info{
         display: flex;
         gap: 10px;
-        flex-wrap: wrap;
+        flex-direction: column;
         font-size: 14px;
     }
 
@@ -274,17 +274,31 @@ header{
 }
 
 
-@media screen and (max-width: 384px){
+@media screen and (max-width: 486px){
 
     .game-header{
         flex-direction: column;
         align-items: center;
     }
 
+    .game-information-header{
+        flex-direction: column;
+    }
+
+    .game-is-owned{
+        margin-top: 15px;
+        text-align: left;
+    }
+
+    .no, .oui{
+        float: left;
+        margin-bottom: 15px;
+    }
+
     .game-little-info{
         display: flex;
         gap: 10px;
-        flex-wrap: wrap;
+        flex-direction: column;
         font-size: 14px;
     }
 
@@ -293,8 +307,8 @@ header{
         font-size: 14px;
     }
 
-    .img-cover-png{
-        width: 100px;
+    .img-cover img{
+        width: 150px;
     }
 
     .game-footer{
