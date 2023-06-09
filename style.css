@@ -1,4 +1,8 @@
 
+html{
+    overflow-y: scroll;
+}
+
 *{
     padding: 0;
     margin: 0;
@@ -223,6 +227,15 @@ header{
     color: #505050;
 }
 
+
+#next-page, #previous-page{
+    visibility: hidden;
+}
+
+.pageSelect{
+    display: flex;
+    justify-content: space-between;
+}
 
 
 @media screen and (max-width: 1790px){
