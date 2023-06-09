@@ -20,7 +20,7 @@
         <img src="Img/Mario_left.png" alt="Mario galaxie gauche" class="img-left">
         <img src="Img/Link_right.png" alt="Link totk" class="img-right">
         <main>
-            <input class="search-bar" type="search" id="search" placeholder="Rechercher un jeu par son nom">
+            <input class="search-bar" type="search" id="search" placeholder="Rechercher un jeu par son nom" autocomplete="off">
             <div class="filter">
                 <label for="filter-owned">Trier par:</label>
                 <select name="filter-owned" id="filter-owned" class="filter-list">
@@ -29,8 +29,13 @@
                     <option value="games-not-owned">Jeux non possédés</option>
                 </select>
             </div>
+            <div class="pageSelect">
+                <button id="previous-page">← Page précedente</button>
+                <button id="next-page">Page suivante →</button>
+            </div>
             <div id="page-indicator"></div>
-            <div class="games-list" wii-games-container></div>
+            <div id="games-list" wii-games-container></div>
+            <div id="no-result"></div>
             <template wii-games-template>
                 <div class="game-box">
                     <div class="game-header">
@@ -63,8 +68,6 @@
                     </div>
                 </div>
             </template>
-            <button id="next-page">Page suivante</button>
-            <button id="previous-page">Page précedente</button>
         </main>
     </body>
 </html>
