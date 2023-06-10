@@ -7,4 +7,5 @@ Link: https://loudo56.github.io/wii-games-manager-using-xml-and-MongoDB/
 
 # Special Thanks
 
-Thank you for the amazing work of <a href="https://www.gametdb.com">GameTDB</a> that provides me a full game list of wii games <3 
+A big thanks for the amazing work of <a href="https://www.gametdb.com">GameTDB</a> which allows me to have a complete list of wii games <3 
+
