@@ -142,6 +142,12 @@ function showWiiGames(Games, currentIndex, searchText){
             const gameButton = templateGameBox.querySelector("[wii-game-button]")
             gameButton.classList.add("add")
             gameButton.textContent = "➕ Ajouter à ma collection"
+            gameButton.addEventListener("click", () => {
+                if(localStorage.getItem("password") === "test"){
+                    console.log(gameID)
+                } else {
+                    console.log("ta pas le droit")
+                }
 
             // Dans la collection ou pas (Pour l'instant par défaut c'est en non)
 
