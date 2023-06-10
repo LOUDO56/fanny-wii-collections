@@ -148,7 +148,9 @@ function showWiiGames(Games, currentIndex, searchText){
                 } else {
                     console.log("ta pas le droit")
                 }
-            }
+               
+
+            })
 
             // Dans la collection ou pas (Pour l'instant par défaut c'est en non)
 
