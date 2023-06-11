@@ -4,6 +4,8 @@ const xml2js = require('xml2js');
 const loki = require('lokijs');
 const app = express();
 const port = 3000;
+require('dotenv').config();
+
 
 const db = new loki('wiigamecollected.db');
 
@@ -12,6 +14,7 @@ const gameList = db.addCollection('gameList');
 app.listen(port, () => {
 	console.log("Server started at port", port)
 });
+
 
 
 app.get('/howmanygameowned', async (req, res) => {
