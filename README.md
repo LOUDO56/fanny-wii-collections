@@ -1,4 +1,4 @@
-# wii-games-manager-using-xml-and-SQlite
+# fanny-wii-collections
 This projects is for my mother who is collectionning all the Wii Games from Europe<br/>
 
 # Special Thanks
