@@ -55,15 +55,15 @@ function showWiiGames(Games, currentIndex, filter, searchText){
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
     let howManyGameOwned;
     let lenGame = Games.length;
-    fetch(`http://localhost:3000/howmanygameowned`)
-        .then(resp => {
-            return resp.json();
-        })
+    // fetch(`http://localhost:3000/howmanygameowned`)
+    //     .then(resp => {
+    //         return resp.json();
+    //     })
 
-        .then(data => {
-            howManyGameOwned = data.count
-            document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur " + lenGame + " en tout"
-        })
+    //     .then(data => {
+    //         howManyGameOwned = data.count
+    //         document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur " + lenGame + " en tout"
+    //     })
 
     if(searchText !== undefined){
         let GameFiltered = []
@@ -89,8 +89,6 @@ function showWiiGames(Games, currentIndex, filter, searchText){
     let maxPage = Math.ceil(Games.length / gamesOnPage);
     let currentPage = Math.ceil(currentIndex / gamesOnPage)+1;
     document.getElementById("page-indicator").innerHTML =  "Page " + currentPage + " sur " + maxPage
-    console.log(currentPage, maxPage)
-    console.log(currentPage === maxPage)
     if(currentPage === maxPage){
         document.getElementById("page-indicator").style.display = "none"
     } else {
