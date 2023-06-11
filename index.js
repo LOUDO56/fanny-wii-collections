@@ -1,33 +1,28 @@
 const express = require('express');
 const fs = require('fs')
 const xml2js = require('xml2js');
-const sqlite3 = require('sqlite3').verbose();
+const loki = require('lokijs');
 const app = express();
 const port = 3000;
 
-const db = new sqlite3.Database('./wiigamecollected.db', sqlite3.OPEN_READWRITE, (err)=>{
-	if (err) return console.error(err.message);
+const db = new loki('wiigamecollected.db');
 
-	console.log("Connected to database")
-});
-
+const gameList = db.addCollection('gameList');
 
 app.listen(port, () => {
 	console.log("Server started at port", port)
 });
 
 
-// app.get('/howmanygameowned', async (req, res) => {
-// 	try {
-// 		const count = await Game.countDocuments();
-// 		res.json({ count });
-// 	} catch (err) {
-// 		console.error('Erreur lors de la récupération du nombre de documents dans la collection "Game":', err);
-// 		res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération du nombre de documents.' });
-// 	}
-// 	});
-
-
+app.get('/howmanygameowned', async (req, res) => {
+	try {
+		const count = await gameList.countDocuments();
+		res.json({ count });
+	} catch (err) {
+		console.error('Erreur lors de la récupération du nombre de documents dans la collection "Game":', err);
+		res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération du nombre de documents.' });
+	}
+	});
 
 app.get("/gamelist", (req, res) => {
 	fs.readFile('./wiitdb.xml', 'utf8', (err, data) => {
@@ -50,41 +45,45 @@ app.get("/gamelist", (req, res) => {
 })
 
 
+app.get("/arrayjeuxpossedes", async (req, res) => {
+	res.json(await gameList.find())
+})
 
 
-app.get('/jeuxpossedes', (req, res) => {
+app.get('/jeuxpossedes', async (req, res) => {
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
-	db.get(`SELECT * FROM jeupossedes WHERE id = ?`, [gameID], (err, row) => {
-		if (err) {
-			console.error('Erreur lors de l\'exécution de la requête :', err.message);
+	try {
+		const game = await gameList.findOne({ id: gameID });
+		if (game) {
+			res.json({ result: true });
 		} else {
-		if (row) {
-			res.json({result: true})
-		} else {
-			res.json({result: false})
+			res.json({ result: false });
 		}
+	} catch (err) {
+		console.error('Erreur lors de l\'exécution de la requête :', err.message);
+		res.status(500).json({ error: err.message });
 	}
 	});
-});
 
-
-app.get('/ajoutsuppr', (req, res) => {
+app.get('/ajoutsuppr', async (req, res) => {
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
-	db.get(`SELECT * FROM jeupossedes WHERE id = ?`, [gameID], (err, row) => {
-		if (err) {
-			console.error('Erreur lors de l\'exécution de la requête :', err.message);
+	try {
+		const game = await gameList.findOne({ id: gameID });
+		if (game) {
+			await gameList.remove(game);
+			res.json({ result: true });
 		} else {
-			if (row) {
-				db.run(`DELETE FROM jeupossedes WHERE id = ?`, [gameID], (err) => {
-					if (err) return console.error("Erro during inserting id to database: ", err.message);
-				});
-				res.json({result: true})
-			} else {
-				db.run(`INSERT INTO jeupossedes VALUES (?,?)`, [gameID, Date.now()], (err) => {
-					if (err) return console.error("Erro during inserting id to database: ", err.message);
-				});
-				res.json({result: false})
-			}
+			gameList.insert({
+				id: gameID,
+				timestamp: Date.now()
+			});
+			db.saveDatabase();
+			res.json({ result: false });
 		}
-	});
+	} catch (err) {
+		console.error('Erreur lors de l\'exécution de la requête :', err.message);
+		res.status(500).json({ error: err.message });
+	}
 });
+
+
