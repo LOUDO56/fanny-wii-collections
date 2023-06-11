@@ -55,15 +55,15 @@ function showWiiGames(Games, currentIndex, filter, searchText){
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
     let howManyGameOwned;
     let lenGame = Games.length;
-    // fetch(`http://localhost:3000/howmanygameowned`)
-    //     .then(resp => {
-    //         return resp.json();
-    //     })
+    fetch(`http://localhost:3000/howmanygameowned`)
+        .then(resp => {
+            return resp.json();
+        })
 
-    //     .then(data => {
-    //         howManyGameOwned = data.count
-    //         document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur " + lenGame + " en tout"
-    //     })
+        .then(data => {
+            howManyGameOwned = data.count
+            document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur " + lenGame + " en tout"
+        })
 
     if(searchText !== undefined){
         let GameFiltered = []
@@ -179,23 +179,23 @@ function showWiiGames(Games, currentIndex, filter, searchText){
             const gameOwned = templateGameBox.querySelector("[wii-game-owned]")
             const gameButton = templateGameBox.querySelector("[wii-game-button]")
             fetch(`http://localhost:3000/jeuxpossedes?gameID=${gameID}`)
-                    .then(resp => resp.json())
-                    .then(data => {
-                        if(data.result === false){
-                            gameButton.classList.toggle("add")
-                            gameButton.textContent = "➕ Ajouter à ma collection"
-                            gameOwned.classList.toggle("no")
-                            gameOwned.innerHTML = "NON"
-                        } else {
-                            gameButton.classList.toggle("rem")
-                            gameButton.textContent = "➖ Supprimer de ma collection"
-                            gameOwned.classList.toggle("oui")
-                            gameOwned.innerHTML = "OUI"
-                        }
-                        })
-                    .catch(error => {
-                        console.log('Erreur lors de la requête :', error);
-                });
+                .then(resp => resp.json())
+                .then(data => {
+                    if(data.result === false){
+                        gameButton.classList.toggle("add")
+                        gameButton.textContent = "➕ Ajouter à ma collection"
+                        gameOwned.classList.toggle("no")
+                        gameOwned.innerHTML = "NON"
+                    } else {
+                        gameButton.classList.toggle("rem")
+                        gameButton.textContent = "➖ Supprimer de ma collection"
+                        gameOwned.classList.toggle("oui")
+                        gameOwned.innerHTML = "OUI"
+                    }
+                    })
+                .catch(error => {
+                    console.log('Erreur lors de la requête :', error);
+            });
             gameButton.addEventListener("click", (e) => {
                 fetch(`http://localhost:3000/ajoutsuppr?gameID=${gameID}`)
                     .then(resp => resp.json())
