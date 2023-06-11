@@ -1,4 +1,4 @@
-# wii-games-manager-using-xml-and-MongoDB
+# wii-games-manager-using-xml-and-SQlite
 This projects is for my mother who is collectionning all the Wii Games from Europe<br/>
 
 # Special Thanks
