@@ -1,6 +1,7 @@
 
 html{
     overflow-y: scroll;
+    scroll-behavior: smooth;
 }
 
 *{
@@ -51,7 +52,14 @@ header{
 
 .made-by{
     font-size: 17px;
-    margin-bottom: 30px;
+    margin-bottom: 15px;
+}
+
+#how-may-game-owned{
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color:#5c63c4;
 }
 
 /* Search Bar */
@@ -204,7 +212,6 @@ header{
     color: white;
     border-radius: 3px;
     font-size: 15px;
-    transition: 0.1s ease;
 }
 
 .add{
@@ -230,6 +237,23 @@ header{
 
 #next-page, #previous-page{
     visibility: hidden;
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 7px;
+    border: 2px black solid;
+    background-color: white;
+    cursor: pointer;
+}
+
+#next-page:hover, #previous-page:hover{
+    color: rgba(0, 0, 0, 0.562);
+    border: 2px rgba(0, 0, 0, 0.562) solid;
+}
+
+#no-result{
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
 }
 
 .pageSelect{
@@ -237,6 +261,15 @@ header{
     justify-content: space-between;
 }
 
+
+#button-haut-page{
+    float: left;
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    border: 2px solid black;
+    margin-bottom: 20px;
+}
 
 @media screen and (max-width: 1790px){
 
