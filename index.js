@@ -1,3 +1,4 @@
+const e = require('express');
 const express = require('express');
 const fs = require('fs')
 const xml2js = require('xml2js');
@@ -5,7 +6,7 @@ const sqlite3 = require('sqlite3').verbose();
 const app = express();
 const port = 3000;
 
-const db = new sqlite3.Database('./wiigamecollected.db', sqlite3.OPEN_READWRITE, (err)=>{
+const db = new sqlite3.Database('./wiigames.db', sqlite3.OPEN_READWRITE, (err)=>{
 	if (err) return console.error(err.message);
 
 	console.log("Connected to database")
@@ -17,54 +18,59 @@ app.listen(port, () => {
 });
 
 
-// app.get('/howmanygameowned', async (req, res) => {
-// 	try {
-// 		const count = await Game.countDocuments();
-// 		res.json({ count });
-// 	} catch (err) {
-// 		console.error('Erreur lors de la récupération du nombre de documents dans la collection "Game":', err);
-// 		res.status(500).json({ error: 'Une erreur s\'est produite lors de la récupération du nombre de documents.' });
-// 	}
-// 	});
+app.get('/howmanygameowned', (req, res) => {
+	db.get(`SELECT COUNT(*) FROM gamelist WHERE owned = true`, (err, row) => {
+		if (err) return console.error("Erreur lors de la récupération de nombre de jeuz possedés", err.message);
+		res.json({count: row['COUNT(*)']});
+	});
+});
 
+
+// db.run(`DROP TABLE gamelist`)
+// db.run(`CREATE TABLE gamelist (
+// 	id VARCHAR(30),
+// 	title VARCHAR(1000),
+// 	day INT,
+// 	month INT,
+// 	year INT,
+// 	genres VARCHAR(100),
+// 	editors VARCHAR(100),
+// 	synopsis TEXT,
+// 	owned BOOLEAN,
+// 	when_added INT
+//   );
+//   )`)
 
 
 
 
 app.get("/gamelist", (req, res) => {
-	fs.readFile('./wiitdb.xml', 'utf8', (err, data) => {
-		if (err) {
-			console.error(err);
-			return;
-		}
-	
-		const parser = new xml2js.Parser();
-		parser.parseString(data, (err, result) => {
-			if (err) {
-				console.error(err);
-				return;
-			}
-
-			res.json(result.datafile.game)
-		});
+	const request = req.query.filter;
+	let sql = `SELECT * FROM gamelist ORDER BY title;`
+	if(request === 'games-owned') {sql = `SELECT * FROM gamelist WHERE owned = true ORDER BY title;`}
+	if(request === 'games-not-owned') {sql = `SELECT * FROM gamelist WHERE owned = false ORDER BY title;`}
+	db.all(sql, (err, data) => {
+		if (err) return console.error("Erreur durant récupération jeux", err.message)
+		res.json(data)
 	});
-
 })
+
 
 
 
 
 app.get('/jeuxpossedes', (req, res) => {
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
-	db.get(`SELECT * FROM jeupossedes WHERE id = ?`, [gameID], (err, row) => {
+	db.get(`SELECT owned FROM gamelist WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) {
 			console.error('Erreur lors de l\'exécution de la requête :', err.message);
 		} else {
-		if (row) {
-			res.json({result: true})
-		} else {
-			res.json({result: false})
-		}
+
+			if (row.owned === 1) {
+				res.json({result: true})
+			} else {
+				res.json({result: false})
+			}
 	}
 	});
 });
@@ -72,20 +78,19 @@ app.get('/jeuxpossedes', (req, res) => {
 
 app.get('/ajoutsuppr', (req, res) => {
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
-	db.get(`SELECT * FROM jeupossedes WHERE id = ?`, [gameID], (err, row) => {
+	db.get(`SELECT owned FROM gamelist WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) {
 			console.error('Erreur lors de l\'exécution de la requête :', err.message);
 		} else {
 
-			if (row) {
-
-				db.run(`DELETE FROM jeupossedes WHERE id = ?`, [gameID], (err) => {
-					if (err) return console.error("Erro during inserting id to database: ", err.message);
+			if (row.owned === 1) {
+				db.run(`UPDATE gamelist SET owned = 0, when_added = ? WHERE id = ?;`, [Date.now(), gameID], (err) => {
+					if (err) return console.error("Error during deleting game owned to database: ", err.message);
 				});
 				res.json({result: true})
 			} else {
-				db.run(`INSERT INTO jeupossedes VALUES (?,?)`, [gameID, Date.now()], (err) => {
-					if (err) return console.error("Erro during inserting id to database: ", err.message);
+				db.run(`UPDATE gamelist SET owned = 1, when_added = 0 WHERE id = ?;`, [gameID], (err) => {
+					if (err) return console.error("Error during inserting game owned to database: ", err.message);
 				});
 				res.json({result: false})
 			}
