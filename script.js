@@ -42,7 +42,6 @@ function showWiiGames(Games, currentIndex, searchText){
         })
 
         .then(data => {
-            console.log(data)
             howManyGameOwned = data.count
             document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur 1269 en tout"
         })
@@ -305,4 +304,22 @@ document.getElementById("filter").addEventListener('change', (e) => {
                 showWiiGames(listGames, 0, outputSearch);
             }
         )
+});
+
+
+document.getElementById("submit-mdp").addEventListener("click", () => {
+    const mdp = document.getElementById('mdp-value').value
+    console.log(mdp)
+    fetch('http://localhost:3000/checkmdp?mdp=' + mdp)
+        .then(resp => resp.json())
+        .then(data => {
+            if(data.result === true){
+                document.getElementById('mdp-value').remove();
+                document.getElementById('submit-mdp').remove();
+                document.getElementById('security-mdp').remove();
+                document.getElementById('error-mdp').remove();
+            } else {
+                document.getElementById('error-mdp').style.display = "block";
+            }
+        })
 });

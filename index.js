@@ -1,10 +1,16 @@
-const e = require('express');
+
+// --------- Partie setup --------- //
+
+
 const express = require('express');
-const fs = require('fs')
-const xml2js = require('xml2js');
+const session = require('express-session');
 const sqlite3 = require('sqlite3').verbose();
+const cors = require('cors');
 const app = express();
+require('dotenv').config({ path: 'mdp.env' });
 const port = 3000;
+
+
 
 const db = new sqlite3.Database('./wiigames.db', sqlite3.OPEN_READWRITE, (err)=>{
 	if (err) return console.error(err.message);
@@ -17,33 +23,42 @@ app.listen(port, () => {
 	console.log("Server started at port", port)
 });
 
+app.use(cors({
+	origin: 'http://127.0.0.1:5500',
+	credentials: true
+  }));
+  
 
-app.get('/howmanygameowned', (req, res) => {
-	db.get(`SELECT COUNT(*) FROM gamelist WHERE owned = true`, (err, row) => {
-		if (err) return console.error("Erreur lors de la récupération de nombre de jeuz possedés", err.message);
-		res.json({count: row['COUNT(*)']});
-	});
+app.use(session({
+	secret: process.env.COOKIE,
+	resave: false,
+	saveUninitialized: true,
+  }));
+
+
+
+
+
+
+// --------- Partie intéraction --------- //
+
+
+//Fonction pour check le mdp
+app.get('/checkmdp', (req, res) => {
+	const mdp = req.query.mdp;
+	if(process.env.MDP === mdp){
+		req.session.can_interact = true;
+		console.log(req.session.can_interact)
+		res.json({result: true})
+	} else {
+		console.log(req.session.can_interact)
+		res.json({result: false})
+	}
 });
 
 
-// db.run(`DROP TABLE gamelist`)
-// db.run(`CREATE TABLE gamelist (
-// 	id VARCHAR(30),
-// 	title VARCHAR(1000),
-// 	day INT,
-// 	month INT,
-// 	year INT,
-// 	genres VARCHAR(100),
-// 	editors VARCHAR(100),
-// 	synopsis TEXT,
-// 	owned BOOLEAN,
-// 	when_added INT
-//   );
-//   )`)
 
-
-
-
+//Fonction principale pour retourner les jeux
 app.get("/gamelist", (req, res) => {
 	const request = req.query.filter;
 	let sql = `SELECT * FROM gamelist ORDER BY title;`
@@ -56,9 +71,18 @@ app.get("/gamelist", (req, res) => {
 })
 
 
+//Fonction qui permet de savoir combien de jeu nous avons
+app.get('/howmanygameowned', (req, res) => {
+	db.get(`SELECT COUNT(*) FROM gamelist WHERE owned = true`, (err, row) => {
+		if (err) return console.error("Erreur lors de la récupération de nombre de jeuz possedés", err.message);
+		res.json({count: row['COUNT(*)']});
+	});
+});
 
 
 
+
+// Fonction qui permet de vérifier si le jeu est possédé ou non pour l'affichage HTML
 app.get('/jeuxpossedes', (req, res) => {
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
 	db.get(`SELECT owned FROM gamelist WHERE id = ?;`, [gameID], (err, row) => {
@@ -76,7 +100,11 @@ app.get('/jeuxpossedes', (req, res) => {
 });
 
 
+
+// Fonction qui permet d'ajouter un jeu ou le supprimer
 app.get('/ajoutsuppr', (req, res) => {
+	console.log(req.session.can_interact)
+	// if(!req.session.can_interact ){ return;}
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
 	db.get(`SELECT owned FROM gamelist WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) {
