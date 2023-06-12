@@ -6,7 +6,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 require('dotenv').config({ path: 'mdp.env' });
-const port = 3000;
+const port = process.env.PORT;
 
 
 

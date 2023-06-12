@@ -19,7 +19,7 @@ if (window.screen.width <= 486){
 
 
 
-fetch("http://localhost:3000/gamelist")
+fetch("https://wii-fanny-collection.onrender.com/gamelist")
     .then(resp =>{
         return resp.json()
     })
@@ -36,7 +36,7 @@ fetch("http://localhost:3000/gamelist")
 function showWiiGames(Games, currentIndex, searchText){
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
     let howManyGameOwned;
-    fetch(`http://localhost:3000/howmanygameowned`)
+    fetch(`https://wii-fanny-collection.onrender.com/howmanygameowned`)
         .then(resp => {
             return resp.json();
         })
@@ -135,7 +135,7 @@ function showWiiGames(Games, currentIndex, searchText){
             // Bouton et verif si jeux possedés
             const gameOwned = templateGameBox.querySelector("[wii-game-owned]")
             const gameButton = templateGameBox.querySelector("[wii-game-button]")
-            fetch(`http://localhost:3000/jeuxpossedes?gameID=${gameID}`)
+            fetch(`https://wii-fanny-collection.onrender.com/jeuxpossedes?gameID=${gameID}`)
                     .then(resp => resp.json())
                     .then(data => {
                         if(data.result === false){
@@ -156,7 +156,7 @@ function showWiiGames(Games, currentIndex, searchText){
             gameButton.addEventListener("click", (e) => {
                 // const password = document.getElementById('mdp-value').value
                 const password = localStorage.getItem('password')
-                fetch(`http://localhost:3000/ajoutsuppr?gameID=${gameID}&password=${password}`)
+                fetch(`https://wii-fanny-collection.onrender.com/ajoutsuppr?gameID=${gameID}&password=${password}`)
                     .then(resp => resp.json())
                     .then(data => {
                         if(data.result === false){
@@ -295,7 +295,7 @@ document.getElementById("filter").addEventListener('change', (e) => {
         document.getElementById("games-list").removeChild(gamesPage[i])
     }
         
-    fetch("http://localhost:3000/gamelist?filter=" + filter)
+    fetch("https://wii-fanny-collection.onrender.com/gamelist?filter=" + filter)
         .then(resp =>{
             return resp.json()
         })
