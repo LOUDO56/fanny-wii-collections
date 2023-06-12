@@ -43,7 +43,7 @@ function showWiiGames(Games, currentIndex, searchText){
 
         .then(data => {
             howManyGameOwned = data.count
-            document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur 1269 en tout"
+            document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur 1268 en tout"
         })
 
     if(searchText !== undefined){
@@ -154,7 +154,9 @@ function showWiiGames(Games, currentIndex, searchText){
                         console.log('Erreur lors de la requête :', error);
                 });
             gameButton.addEventListener("click", (e) => {
-                fetch(`http://localhost:3000/ajoutsuppr?gameID=${gameID}`)
+                // const password = document.getElementById('mdp-value').value
+                const password = localStorage.getItem('password')
+                fetch(`http://localhost:3000/ajoutsuppr?gameID=${gameID}&password=${password}`)
                     .then(resp => resp.json())
                     .then(data => {
                         if(data.result === false){
@@ -174,7 +176,7 @@ function showWiiGames(Games, currentIndex, searchText){
                             gameOwned.innerHTML = "NON"
                             howManyGameOwned--;
                         }
-                        document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur 1269 en tout"
+                        document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur 1268 en tout"
                     })
                     .catch(error => {
                         console.log('Erreur lors de la requête :', error);
@@ -306,20 +308,3 @@ document.getElementById("filter").addEventListener('change', (e) => {
         )
 });
 
-
-document.getElementById("submit-mdp").addEventListener("click", () => {
-    const mdp = document.getElementById('mdp-value').value
-    console.log(mdp)
-    fetch('http://localhost:3000/checkmdp?mdp=' + mdp)
-        .then(resp => resp.json())
-        .then(data => {
-            if(data.result === true){
-                document.getElementById('mdp-value').remove();
-                document.getElementById('submit-mdp').remove();
-                document.getElementById('security-mdp').remove();
-                document.getElementById('error-mdp').remove();
-            } else {
-                document.getElementById('error-mdp').style.display = "block";
-            }
-        })
-});

@@ -3,9 +3,7 @@
 
 
 const express = require('express');
-const session = require('express-session');
 const sqlite3 = require('sqlite3').verbose();
-const cors = require('cors');
 const app = express();
 require('dotenv').config({ path: 'mdp.env' });
 const port = 3000;
@@ -14,7 +12,6 @@ const port = 3000;
 
 const db = new sqlite3.Database('./wiigames.db', sqlite3.OPEN_READWRITE, (err)=>{
 	if (err) return console.error(err.message);
-
 	console.log("Connected to database")
 });
 
@@ -23,17 +20,6 @@ app.listen(port, () => {
 	console.log("Server started at port", port)
 });
 
-app.use(cors({
-	origin: 'http://127.0.0.1:5500',
-	credentials: true
-  }));
-  
-
-app.use(session({
-	secret: process.env.COOKIE,
-	resave: false,
-	saveUninitialized: true,
-  }));
 
 
 
@@ -41,20 +27,6 @@ app.use(session({
 
 
 // --------- Partie intéraction --------- //
-
-
-//Fonction pour check le mdp
-app.get('/checkmdp', (req, res) => {
-	const mdp = req.query.mdp;
-	if(process.env.MDP === mdp){
-		req.session.can_interact = true;
-		console.log(req.session.can_interact)
-		res.json({result: true})
-	} else {
-		console.log(req.session.can_interact)
-		res.json({result: false})
-	}
-});
 
 
 
@@ -103,8 +75,7 @@ app.get('/jeuxpossedes', (req, res) => {
 
 // Fonction qui permet d'ajouter un jeu ou le supprimer
 app.get('/ajoutsuppr', (req, res) => {
-	console.log(req.session.can_interact)
-	// if(!req.session.can_interact ){ return;}
+	if(req.query.password !== process.env.MDP){return;}
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
 	db.get(`SELECT owned FROM gamelist WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) {
