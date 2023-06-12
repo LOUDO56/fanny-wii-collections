@@ -158,8 +158,7 @@ function showWiiGames(Games, currentIndex, searchText){
                         console.log('Erreur lors de la requête :', error);
                 });
             gameButton.addEventListener("click", (e) => {
-                // const password = document.getElementById('mdp-value').value
-                const password = localStorage.getItem('password')
+                const password = document.getElementById('mdp-value').value
                 fetch(`https://wii-fanny-collection.onrender.com/ajoutsuppr?gameID=${gameID}&password=${password}`)
                     .then(resp => resp.json())
                     .then(data => {
@@ -311,4 +310,3 @@ document.getElementById("filter").addEventListener('change', (e) => {
             }
         )
 });
-
