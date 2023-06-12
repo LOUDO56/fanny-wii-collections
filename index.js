@@ -83,12 +83,12 @@ app.get('/ajoutsuppr', (req, res) => {
 		} else {
 
 			if (row.owned === 1) {
-				db.run(`UPDATE gamelist SET owned = 0, when_added = ? WHERE id = ?;`, [Date.now(), gameID], (err) => {
+				db.run(`UPDATE gamelist SET owned = 0, when_added = 0 WHERE id = ?;`, [gameID], (err) => {
 					if (err) return console.error("Error during deleting game owned to database: ", err.message);
 				});
 				res.json({result: true})
 			} else {
-				db.run(`UPDATE gamelist SET owned = 1, when_added = 0 WHERE id = ?;`, [gameID], (err) => {
+				db.run(`UPDATE gamelist SET owned = 1, when_added = ? WHERE id = ?;`, [Date.now(), gameID], (err) => {
 					if (err) return console.error("Error during inserting game owned to database: ", err.message);
 				});
 				res.json({result: false})
