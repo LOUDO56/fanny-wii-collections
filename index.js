@@ -8,12 +8,12 @@ const xml2js = require('xml2js')
 const cors = require('cors')
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
-require('dotenv').config({ path: '../mdp.env' });
+require('dotenv').config({ path: 'mdp.env' });
 const port = process.env.PORT;
 
 	
 
-const db = new sqlite3.Database('../wiigames.db', sqlite3.OPEN_READWRITE, (err)=>{
+const db = new sqlite3.Database('wiigames.db', sqlite3.OPEN_READWRITE, (err)=>{
 	if (err) return console.error(err.message);
 	console.log("Connected to database")
 });
