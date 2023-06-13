@@ -3,8 +3,8 @@
 
 
 const express = require('express');
-// const fs = require('fs');
-// const xml2js = require('xml2js')
+const fs = require('fs');
+const xml2js = require('xml2js')
 const mysql = require('mysql2')
 const cors = require('cors')
 const app = express();
@@ -21,7 +21,7 @@ const db = mysql.createPool({
 	port: process.env.PORTDB,
 })
 
- 
+
 app.listen(port, () => {
 	console.log("Server started at port", port)
 });

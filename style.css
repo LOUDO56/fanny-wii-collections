@@ -65,6 +65,7 @@ header{
 .mdp{
     margin: 15px 0;
     font-size: 16px;
+    padding: 5px;
 }
 
 #error-mdp{

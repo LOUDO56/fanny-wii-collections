@@ -14,6 +14,8 @@ if (window.screen.width <= 486){
     gamesOnPage = 7;
 }
 
+let lengame = 0;
+
 
 
 
@@ -26,6 +28,7 @@ fetch("https://wii-fanny-collection.onrender.com/gamelist")
     .then(
         data => {
             listGames = data;
+            lengame = listGames.length
             showWiiGames(listGames, currentRankGames);
         }
     )
@@ -42,7 +45,7 @@ function showWiiGames(Games, currentIndex, searchText){
 
         .then(data => {
             howManyGameOwned = data.count
-            document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur 1268 en tout"
+            document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur " + lengame + " en tout"
         })
 
     if(searchText !== undefined){
