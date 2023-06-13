@@ -6,7 +6,6 @@ if(sessionStorage.getItem("currentRankGames") === null){
 
 
 let currentRankGames = parseInt(sessionStorage.getItem("currentRankGames"));
-// let filter = document.getElementById("filter")
 
 let filter;
 let listGames = []
