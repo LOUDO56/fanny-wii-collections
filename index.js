@@ -5,6 +5,7 @@
 const express = require('express');
 const fs = require('fs');
 const xml2js = require('xml2js')
+const cors = require('cors')
 const sqlite3 = require('sqlite3').verbose();
 const app = express();
 require('dotenv').config({ path: 'mdp.env' });
@@ -21,6 +22,8 @@ const db = new sqlite3.Database('./wiigames.db', sqlite3.OPEN_READWRITE, (err)=>
 app.listen(port, () => {
 	console.log("Server started at port", port)
 });
+
+app.use(cors())
 
 
 
