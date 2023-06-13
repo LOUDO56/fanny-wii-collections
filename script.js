@@ -50,8 +50,11 @@ function showWiiGames(Games, currentIndex, searchText){
 
     if(searchText !== undefined){
         let GameFiltered = []
+        let titlegame = Games[i].title.toLowerCase();
+        titlegame = titlegame.replace('é', 'e')
+        titlegame = titlegame.replace('à', 'a')
         for(let i = 0; i < Games.length; i++){
-            if(Games[i].title.toLowerCase().includes(searchText)){
+            if(titlegame.includes(searchText)){
                 GameFiltered.push(Games[i])
             }
         }
