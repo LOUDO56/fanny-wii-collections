@@ -92,7 +92,6 @@ function showWiiGames(Games, currentIndex, searchText){
             gameCover.addEventListener('error', () => {
                 gameCover.src = "Wii_Covers-2/" + gameID + ".png"
             })
-            console.log(gameCover.src)
             gameCover.alt = "Pas de cover trouvé pour ce jeu"
 
             //définition du titre
