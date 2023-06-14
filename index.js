@@ -5,6 +5,8 @@
 const express = require('express');
 const fs = require('fs');
 const xml2js = require('xml2js')
+const cron = require('node-cron');
+const http = require('http');
 const mysql = require('mysql2')
 const cors = require('cors')
 const app = express();
@@ -20,6 +22,11 @@ const db = mysql.createPool({
 	database: process.env.DATABASE,
 	port: process.env.PORTDB,
 })
+
+
+cron.schedule('*/14 * * * *', () => {
+  http.get('https://wii-fanny-collection.onrender.com');
+});
 
 
 app.listen(port, () => {
