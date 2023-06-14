@@ -24,7 +24,7 @@ const db = mysql.createPool({
 })
 
 
-cron.schedule('*/14 * * * *', () => {
+cron.schedule('*/5 * * * *', () => {
   http.get('https://wii-fanny-collection.onrender.com');
 });
 
