@@ -44,7 +44,7 @@ cron.schedule('*/10 * * * *', () => {
 	  });
 	
 	  response.on('end', () => {
-		console.log(`La requête s'est terminée. Réponse du serveur : ${data}`);
+
 	  });
 	});
 	
