@@ -54,10 +54,11 @@ function showWiiGames(Games, currentIndex, searchText){
             let titlegame = Games[i].title.toLowerCase();
             titlegame = titlegame.replace(/é/g, "e")
             titlegame = titlegame.replace(/à/g, "a")
-            titlegame = titlegame.replace(/î/g, "a")
+            titlegame = titlegame.replace(/î/g, "i")
+            titlegame = titlegame.replace(/ï/g, "i")
+            titlegame = titlegame.replace(/ô/g, "o")
+            titlegame = titlegame.replace(/ö/g, "o")
             if(titlegame.includes(searchText)){
-                console.log(titlegame, "jeu")
-                console.log(searchText, "recherche")
                 GameFiltered.push(Games[i])
             }
         }
@@ -244,7 +245,10 @@ searchInput.addEventListener("input", output => {
     outputSearch = output.target.value.toLowerCase()
     outputSearch = outputSearch.replace(/é/g, "e")
     outputSearch = outputSearch.replace(/à/g, "a")
-    outputSearch = outputSearch.replace(/î/g, "a")
+    outputSearch = outputSearch.replace(/î/g, "i")
+    outputSearch = outputSearch.replace(/ï/g, "i")
+    outputSearch = outputSearch.replace(/ô/g, "o")
+    outputSearch = outputSearch.replace(/ö/g, "o")
     sessionStorage.setItem("currentRankGames", 0)
     currentRankGames = 0;
     showWiiGames(listGames, currentRankGames, outputSearch)
