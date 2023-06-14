@@ -20,7 +20,7 @@ let lengame = 0;
 
 
 
-fetch("https://wii-fanny-collection.onrender.com/gamelist")
+fetch("http://localhost:4000/gamelist")
     .then(resp =>{
         return resp.json()
     })
@@ -38,7 +38,7 @@ fetch("https://wii-fanny-collection.onrender.com/gamelist")
 function showWiiGames(Games, currentIndex, searchText){
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
     let howManyGameOwned;
-    fetch(`https://wii-fanny-collection.onrender.com/howmanygameowned`)
+    fetch(`http://localhost:4000/howmanygameowned`)
         .then(resp => {
             return resp.json();
         })
@@ -52,9 +52,12 @@ function showWiiGames(Games, currentIndex, searchText){
         let GameFiltered = []
         for(let i = 0; i < Games.length; i++){
             let titlegame = Games[i].title.toLowerCase();
-            titlegame = titlegame.replace('é', 'e')
-            titlegame = titlegame.replace('à', 'a')
+            titlegame = titlegame.replace(/é/g, "e")
+            titlegame = titlegame.replace(/à/g, "a")
+            titlegame = titlegame.replace(/î/g, "a")
             if(titlegame.includes(searchText)){
+                console.log(titlegame, "jeu")
+                console.log(searchText, "recherche")
                 GameFiltered.push(Games[i])
             }
         }
@@ -143,7 +146,7 @@ function showWiiGames(Games, currentIndex, searchText){
             // Bouton et verif si jeux possedés
             const gameOwned = templateGameBox.querySelector("[wii-game-owned]")
             const gameButton = templateGameBox.querySelector("[wii-game-button]")
-            fetch(`https://wii-fanny-collection.onrender.com/jeuxpossedes?gameID=${gameID}`)
+            fetch(`http://localhost:4000/jeuxpossedes?gameID=${gameID}`)
                     .then(resp => resp.json())
                     .then(data => {
                         if(data.result === false){
@@ -163,7 +166,7 @@ function showWiiGames(Games, currentIndex, searchText){
                 });
             gameButton.addEventListener("click", (e) => {
                 const password = document.getElementById('mdp-value').value
-                fetch(`https://wii-fanny-collection.onrender.com/ajoutsuppr?gameID=${gameID}&password=${password}`)
+                fetch(`http://localhost:4000/ajoutsuppr?gameID=${gameID}&password=${password}`)
                     .then(resp => resp.json())
                     .then(data => {
                         if(data.result === false){
@@ -239,8 +242,9 @@ searchInput.addEventListener("input", output => {
         document.getElementById("games-list").removeChild(gamesPage[i])
     } 
     outputSearch = output.target.value.toLowerCase()
-    outputSearch = outputSearch.replace("é", "e")
-    outputSearch = outputSearch.replace("à", "a")
+    outputSearch = outputSearch.replace(/é/g, "e")
+    outputSearch = outputSearch.replace(/à/g, "a")
+    outputSearch = outputSearch.replace(/î/g, "a")
     sessionStorage.setItem("currentRankGames", 0)
     currentRankGames = 0;
     showWiiGames(listGames, currentRankGames, outputSearch)
@@ -302,7 +306,7 @@ document.getElementById("filter").addEventListener('change', (e) => {
         document.getElementById("games-list").removeChild(gamesPage[i])
     }
         
-    fetch("https://wii-fanny-collection.onrender.com/gamelist?filter=" + filter)
+    fetch("http://localhost:4000/gamelist?filter=" + filter)
         .then(resp =>{
             return resp.json()
         })
