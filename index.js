@@ -122,12 +122,12 @@ app.get('/ajoutsuppr', (req, res) => {
 		} else {
 
 			if (row[0].owned === 1) {
-				db.query(`UPDATE wiigames SET owned = 0, when_added = 0 WHERE id = ?;`, [gameID], (err) => {
+				db.query(`UPDATE wiigames SET owned = 0 WHERE id = ?;`, [gameID], (err) => {
 					if (err) return console.error("Error during deleting game owned to database: ", err.message);
 				});
 				res.json({result: true})
 			} else {
-				db.query(`UPDATE wiigames SET owned = 1, when_added = ? WHERE id = ?;`, [Date.now(), gameID], (err) => {
+				db.query(`UPDATE wiigames SET owned = 1 WHERE id = ?;`, [Date.now(), gameID], (err) => {
 					if (err) return console.error("Error during inserting game owned to database: ", err.message);
 				});
 				res.json({result: false})
