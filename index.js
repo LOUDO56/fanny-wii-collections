@@ -26,35 +26,35 @@ const db = mysql.createPool({
 
 
 
-cron.schedule('*/10 * * * *', () => {
+// cron.schedule('*/10 * * * *', () => {
 
 
-	const options = {
-	  hostname: 'wii-fanny-collection.onrender.com',
-	  port: 443,
-	  path: '/',
-	  method: 'GET'
-	};
+// 	const options = {
+// 	  hostname: 'wii-fanny-collection.onrender.com',
+// 	  port: 443,
+// 	  path: '/',
+// 	  method: 'GET'
+// 	};
 	
-	const request = https.request(options, (response) => {
-	  let data = '';
+// 	const request = https.request(options, (response) => {
+// 	  let data = '';
 	
-	  response.on('data', (chunk) => {
-		data += chunk;
-	  });
+// 	  response.on('data', (chunk) => {
+// 		data += chunk;
+// 	  });
 	
-	  response.on('end', () => {
+// 	  response.on('end', () => {
 
-	  });
-	});
+// 	  });
+// 	});
 	
-	request.on('error', (error) => {
-	  console.error(`Une erreur s'est produite lors de la requête : ${error.message}`);
-	});
+// 	request.on('error', (error) => {
+// 	  console.error(`Une erreur s'est produite lors de la requête : ${error.message}`);
+// 	});
 	
-	request.end();
+// 	request.end();
 	
-});
+// });
 
 
 app.listen(port, () => {
