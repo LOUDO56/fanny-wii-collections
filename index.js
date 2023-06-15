@@ -127,7 +127,7 @@ app.get('/ajoutsuppr', (req, res) => {
 				});
 				res.json({result: true})
 			} else {
-				db.query(`UPDATE wiigames SET owned = 1 WHERE id = ?;`, [Date.now(), gameID], (err) => {
+				db.query(`UPDATE wiigames SET owned = 1 WHERE id = ?;`, [gameID], (err) => {
 					if (err) return console.error("Error during inserting game owned to database: ", err.message);
 				});
 				res.json({result: false})
