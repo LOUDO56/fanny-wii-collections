@@ -15,7 +15,7 @@ const port = process.env.PORT;
 
 	
 
-const db = mysql.createPool({
+const db = mysql.createConnection({
 	host: process.env.HOST,
 	user: process.env.USER,
 	password: process.env.PASSWORD,
@@ -24,37 +24,35 @@ const db = mysql.createPool({
 })
 
 
+cron.schedule('*/10 * * * *', () => {
 
 
-// cron.schedule('*/10 * * * *', () => {
+	const options = {
+	  hostname: 'wii-fanny-collection.onrender.com',
+	  port: 443,
+	  path: '/',
+	  method: 'GET'
+	};
+	
+	const request = https.request(options, (response) => {
+	  let data = '';
+	
+	  response.on('data', (chunk) => {
+		data += chunk;
+	  });
+	
+	  response.on('end', () => {
 
-
-// 	const options = {
-// 	  hostname: 'wii-fanny-collection.onrender.com',
-// 	  port: 443,
-// 	  path: '/',
-// 	  method: 'GET'
-// 	};
+	  });
+	});
 	
-// 	const request = https.request(options, (response) => {
-// 	  let data = '';
+	request.on('error', (error) => {
+	  console.error(`Une erreur s'est produite lors de la requête : ${error.message}`);
+	});
 	
-// 	  response.on('data', (chunk) => {
-// 		data += chunk;
-// 	  });
+	request.end();
 	
-// 	  response.on('end', () => {
-
-// 	  });
-// 	});
-	
-// 	request.on('error', (error) => {
-// 	  console.error(`Une erreur s'est produite lors de la requête : ${error.message}`);
-// 	});
-	
-// 	request.end();
-	
-// });
+});
 
 
 app.listen(port, () => {
