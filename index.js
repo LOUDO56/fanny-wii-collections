@@ -5,8 +5,6 @@
 const express = require('express');
 const fs = require('fs');
 const xml2js = require('xml2js')
-const cron = require('node-cron');
-const https = require('https');
 const mysql = require('mysql2')
 const cors = require('cors')
 const app = express();
@@ -22,37 +20,6 @@ const db = mysql.createConnection({
 	database: process.env.DATABASE,
 	port: process.env.PORTDB,
 })
-
-
-cron.schedule('*/10 * * * *', () => {
-
-
-	const options = {
-	  hostname: 'wii-fanny-collection.onrender.com',
-	  port: 443,
-	  path: '/',
-	  method: 'GET'
-	};
-	
-	const request = https.request(options, (response) => {
-	  let data = '';
-	
-	  response.on('data', (chunk) => {
-		data += chunk;
-	  });
-	
-	  response.on('end', () => {
-
-	  });
-	});
-	
-	request.on('error', (error) => {
-	  console.error(`Une erreur s'est produite lors de la requête : ${error.message}`);
-	});
-	
-	request.end();
-	
-});
 
 
 app.listen(port, () => {
