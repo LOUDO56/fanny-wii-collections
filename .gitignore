@@ -1,9 +1,9 @@
 node_modules
 Wii List Prototype.pdf
+.env
 mdp.env
 wiitdb.xml
 fff.text
 phpMyAdmin.url
 id_mysql.txt
 backup_donnee
-.env

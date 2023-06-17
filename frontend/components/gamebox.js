@@ -14,12 +14,12 @@ export const gamebox = (gamedata) => {
                 </div>
                 <div class="game-information-body">
                     <div class="game-little-info">
-                        <p class="game-published" wii-game-published><strong>Sortie: ${gamedata.published}</strong></p>
-                        <p class="game-genres" wii-game-genres><strong>Genres: ${gamedata.genres ? gamedata.genres : " Inconnu"}</strong></p>
-                        <p class="game-editors" wii-game-editors><strong>Éditeurs: ${gamedata.editors ? gamedata.editors : " Inconnu"}</strong></p>
+                        <p class="game-published" wii-game-published><strong>Sortie:</strong> ${gamedata.published}</p>
+                        <p class="game-genres" wii-game-genres><strong>Genres:</strong> ${gamedata.genres ? gamedata.genres : " Inconnu"}</p>
+                        <p class="game-editors" wii-game-editors><strong>Éditeurs:</strong> ${gamedata.editors ? gamedata.editors : " Inconnu"}</p>
                     </div>
                     <div class="game-synopsis" wii-game-synopsis>
-                        <strong>Synopsis: ${gamedata.synopsis}</strong>
+                        <strong>Synopsis:</strong> ${gamedata.synopsis}
                     </div>
                     <button class="read-more">Lire la suite</button>
                 </div>

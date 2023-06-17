@@ -1,10 +1,9 @@
-
-html{
+html {
     overflow-y: scroll;
     scroll-behavior: smooth;
 }
 
-*{
+* {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
@@ -16,20 +15,20 @@ body {
     min-height: 100vh;
     padding: 20px;
 }
-  
+
 main {
     max-width: 60em;
     margin: 0 auto;
 }
-  
 
-.img-left{
+
+.img-left {
     position: fixed;
     top: -5px;
     left: 0;
 }
 
-.img-right{
+.img-right {
     position: fixed;
     top: 0;
     right: 0;
@@ -41,30 +40,41 @@ main {
 
 /* Début */
 
-header{
+header {
     text-align: center;
 }
 
-.title{
+.title {
     font-size: 50px;
     margin-bottom: 5px;
 }
 
-.made-by{
+.made-by {
     font-size: 17px;
     margin-bottom: 15px;
 }
 
-#how-may-game-owned{
+#how-may-game-owned {
     margin-bottom: 15px;
     font-size: 18px;
     font-weight: bold;
-    color:#5c63c4;
+    color: #5c63c4;
+}
+
+.mdp {
+    margin: 15px 0;
+    font-size: 16px;
+    padding: 5px;
+}
+
+#error-mdp {
+    display: none;
+    color: rgb(151, 35, 35);
 }
 
 /* Search Bar */
 
-.search-bar{
+.search-bar {
     position: relative;
     width: 100%;
     padding: 8px;
@@ -79,19 +89,19 @@ header{
 /* Liste des jeux */
 
 
-.filter{
+.filter {
     font-weight: bold;
     font-size: 20px;
     margin-bottom: 25px;
 }
 
-.filter-list{
+.filter-list {
     font-size: 15px;
     padding: 3px 5px;
 }
 
 
-.game-box{
+.game-box {
     position: relative;
     padding: 10px;
     padding-bottom: 0;
@@ -104,19 +114,19 @@ header{
     margin-bottom: 45px;
 }
 
-.game-header{
+.game-header {
     display: flex;
     gap: 30px;
 }
 
 
 
-.game-information{
+.game-information {
     width: 100%;
 }
 
 
-.game-information-header{
+.game-information-header {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
@@ -124,12 +134,12 @@ header{
 
 
 
-.game-title{
+.game-title {
     font-size: 21px;
     font-weight: bold;
 }
 
-.game-synopsis{
+.game-synopsis {
     text-overflow: ellipsis;
     overflow: hidden;
     display: -webkit-box;
@@ -142,7 +152,7 @@ header{
 
 
 
-.read-more{
+.read-more {
     border: none;
     background-color: #F8F8F8;
     color: rgb(29, 107, 143);
@@ -152,7 +162,7 @@ header{
     display: none;
 }
 
-.read-more:hover{
+.read-more:hover {
     text-decoration: none;
 }
 
@@ -160,13 +170,14 @@ header{
     content: "...";
 }
 
-.game-is-owned{
+.game-is-owned {
     color: #505050;
     text-align: right;
 
 }
 
-.no, .oui{
+.no,
+.oui {
     margin-top: 5px;
     float: right;
     padding: 0 5px;
@@ -175,37 +186,38 @@ header{
     border-radius: 3px;
 }
 
-.no{
+.no {
     background-color: #E76B6B;
 }
 
-.oui{
+.oui {
     background-color: #4BC050;
 }
 
 
 
-.game-little-info{
+.game-little-info {
     display: flex;
     gap: 40px;
 }
 
-.game-little-info p:last-child{
+.game-little-info p:last-child {
     max-width: 25em;
 }
 
-.button-add-rem{
+.button-add-rem {
     padding: 20px 3px;
 
 }
 
-.game-footer{
+.game-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.add, .rem{
+.add,
+.rem {
     padding: 5px 10px;
     border: none;
     cursor: pointer;
@@ -214,28 +226,29 @@ header{
     font-size: 15px;
 }
 
-.add{
+.add {
     background-color: #47BC2A;
 }
 
-.rem{
+.rem {
     background-color: #CD422F;
 }
 
-.add:hover{
+.add:hover {
     background-color: #31851c;
 }
 
-.rem:hover{
+.rem:hover {
     background-color: #a03223;
 }
 
-.added{
+.added {
     color: #505050;
 }
 
 
-#next-page, #previous-page{
+#next-page,
+#previous-page {
     visibility: hidden;
     margin-bottom: 10px;
     font-size: 16px;
@@ -245,24 +258,25 @@ header{
     cursor: pointer;
 }
 
-#next-page:hover, #previous-page:hover{
+#next-page:hover,
+#previous-page:hover {
     color: rgba(0, 0, 0, 0.562);
     border: 2px rgba(0, 0, 0, 0.562) solid;
 }
 
-#no-result{
+#no-result {
     text-align: center;
     font-size: 17px;
     font-weight: bold;
 }
 
-.pageSelect{
+.pageSelect {
     display: flex;
     justify-content: space-between;
 }
 
 
-#button-haut-page{
+#button-haut-page {
     float: left;
     text-decoration: none;
     color: black;
@@ -271,37 +285,37 @@ header{
     margin-bottom: 20px;
 }
 
-@media screen and (max-width: 1790px){
+@media screen and (max-width: 1790px) {
 
-    .img-left{
+    .img-left {
         left: -5em;
     }
-    
-    .img-right{
+
+    .img-right {
         right: -5em;
     }
-    
+
 }
 
 
 
-@media screen and (max-width: 1666px){
+@media screen and (max-width: 1666px) {
 
-    .img-left{
+    .img-left {
         display: none;
     }
-    
-    .img-right{
+
+    .img-right {
         display: none;
     }
-    
+
 }
 
 
-@media screen and (max-width: 582px){
+@media screen and (max-width: 582px) {
 
 
-    .game-little-info{
+    .game-little-info {
         display: flex;
         gap: 10px;
         flex-direction: column;
@@ -309,48 +323,49 @@ header{
     }
 
 
-    .game-information{
+    .game-information {
         font-size: 14px;
     }
 
-    .img-cover img{
+    .img-cover img {
         width: 110px;
     }
 
-    .game-footer{
+    .game-footer {
         flex-direction: column;
     }
-    
+
 
 }
 
 
-@media screen and (max-width: 486px){
+@media screen and (max-width: 486px) {
 
-    .title{
+    .title {
         font-size: 30px;
     }
 
-    .game-header{
+    .game-header {
         flex-direction: column;
         align-items: center;
     }
 
-    .game-information-header{
+    .game-information-header {
         flex-direction: column;
     }
 
-    .game-is-owned{
+    .game-is-owned {
         margin-top: 15px;
         text-align: left;
     }
 
-    .no, .oui{
+    .no,
+    .oui {
         float: left;
         margin-bottom: 15px;
     }
 
-    .game-little-info{
+    .game-little-info {
         display: flex;
         gap: 10px;
         flex-direction: column;
@@ -358,18 +373,17 @@ header{
     }
 
 
-    .game-information{
+    .game-information {
         font-size: 14px;
     }
 
-    .img-cover img{
+    .img-cover img {
         width: 150px;
     }
 
-    .game-footer{
+    .game-footer {
         flex-direction: column;
     }
-    
+
 
 }
-

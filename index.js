@@ -11,7 +11,11 @@ const app = express();
 require('dotenv').config({ path: 'mdp.env' });
 const port = process.env.PORT;
 
-
+var corsOptions = {
+	origin: 'http://localhost:5500',
+	optionsSuccessStatus: 200 // For legacy browser support
+};
+app.use(cors(corsOptions));
 
 const db = mysql.createPool({
 	host: process.env.HOST,
@@ -62,14 +66,14 @@ app.get('/howmanygameowned', (req, res) => {
 app.get('/jeuxpossedes', (req, res) => {
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
 	db.query(`SELECT owned FROM wiigames WHERE id = ?;`, [gameID], (err, row) => {
-		if (err) {
-			console.error('Erreur lors de l\'exécution de la requête :', err.message);
+		if (err || !row.length) { // Check for empty array
+			// console.error('Erreur lors de l\'exécution de la requête :', err.message);
+			res.status(500).send({ error: err });
 		} else {
-
 			if (row[0].owned === 1) {
-				res.json({ result: true });
+				res.status(201).send({ result: true });
 			} else {
-				res.json({ result: false });
+				res.status(201).send({ result: false });
 			}
 		}
 	});
@@ -79,7 +83,7 @@ app.get('/jeuxpossedes', (req, res) => {
 
 // Fonction qui permet d'ajouter un jeu ou le supprimer
 app.get('/ajoutsuppr', (req, res) => {
-	if (req.query.password !== process.env.MDP) { return; }
+	if (req.query.password !== process.env.MDP) { res.status(401).send({ error: "unauthorized" }); }
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
 	db.query(`SELECT owned FROM wiigames WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) {

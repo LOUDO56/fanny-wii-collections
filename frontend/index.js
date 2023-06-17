@@ -1,21 +1,21 @@
 import { gamebox } from "./components/gamebox.js";
 
 // Just have to change this to https://wii-fanny-collection.onrender.com for it to work for deployment
-const HOST = "http://localhost:3000";
+const HOST = "http://localhost:4000";
 const IMG_PATH = "frontend/Img";
-const IMG_COVERS_PATH = IMG_PATH + "/Wii_covers/";
+const IMG_COVERS_PATH = IMG_PATH + "/Wii_covers-1/";
+const IMG_COVERS_PATH2 = IMG_PATH + "/Wii_covers-2/";
+const MDP_INPUT = document.getElementById('mdp-value');
 
-// const wiiGameList = document.querySelector("[wii-games-template]");
+let filter;
+let howManyGamesOwned = 0;
 const wiiGameListContainer = document.querySelector("[wii-games-container]");
 if (sessionStorage.getItem("currentRankGames") === null) {
     sessionStorage.setItem("currentRankGames", 0);
 }
+let currentRankGames = parseInt(sessionStorage.getItem("currentRankGames"));
 
-const currentRankGames = parseInt(sessionStorage.getItem("currentRankGames"));
-// let filter = document.getElementById("filter")
-const optionFilter = "none";
-
-const listGames = [];
+let listGames = [];
 const gamesOnPage = 10;
 if (window.screen.width <= 486) {
     gamesOnPage = 7;
@@ -34,75 +34,76 @@ const format_published_date = (date) => {
 };
 
 // Game owned - Change state of button and tag
-const addRemoveGame = async (button, tag_owned, gameID, owned) => {
-    const password = document.getElementById('mdp-value').value;
+const addRemoveGame = async (button, tag_owned, gameID) => {
+    const password = MDP_INPUT.value;
     const addOrRemove = await request("/ajoutsuppr", `?gameID=${gameID}&password=${password}`);
     const addOrRemoveJson = await addOrRemove.json();
 
-    console.log("addOrRemoveJson", addOrRemoveJson);
-
-    if (!owned) {
-        button.classList.add("rem");
-        button.textContent = "➖ Supprimer de ma collection";
-        tag_owned.classList.remove("no");
-        tag_owned.classList.add("oui");
-        tag_owned.innerHTML = "OUI";
-    } else {
-        button.classList.remove("rem");
-        button.classList.add("add");
-        button.textContent = "➕ Ajouter à ma collection";
-        tag_owned.classList.remove("oui");
-        tag_owned.classList.add("no");
-        tag_owned.innerHTML = "NON";
+    if (addOrRemoveJson.result) {
+        if (!addOrRemoveJson.result) {
+            button.classList.add("rem");
+            button.textContent = "➖ Supprimer de ma collection";
+            tag_owned.classList.remove("no");
+            tag_owned.classList.add("oui");
+            tag_owned.innerHTML = "OUI";
+            document.getElementById("how-may-game-owned").textContent = "J'ai " + (howManyGamesOwnedJson.count + 1) + " jeux sur " + lenGame + " en tout";
+        } else {
+            button.classList.remove("rem");
+            button.classList.add("add");
+            button.textContent = "➕ Ajouter à ma collection";
+            tag_owned.classList.remove("oui");
+            tag_owned.classList.add("no");
+            tag_owned.innerHTML = "NON";
+            document.getElementById("how-may-game-owned").textContent = "J'ai " + (howManyGamesOwnedJson.count - 1) + " jeux sur " + lenGame + " en tout";
+        }
     }
+
+    // 
 };
 
-// Get list of games and convert the response in json
+// Test if path to image valid
+const testImagePath = (path) => {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = path;
+    });
+};
+
+
+// Get list of games and convert the response in json then display them
 const gameList = await request("/gamelist");
-const gameListJson = await gameList.json();
+listGames = await gameList.json();
+showWiiGames(listGames, currentRankGames);
 
-gameListJson.forEach(GamesID => {
-    if (GamesID.type[0] === "" && GamesID.region[0] === "PAL" && !GamesID.locale[0].title[0].toLowerCase().includes("(demo)") &&
-        (GamesID.languages[0].includes("FR") || GamesID.languages[0].includes("EN"))) {
-        let isTitleAlreadyPresent;
-        if (GamesID.locale[1] && GamesID.locale[1].$.lang === "FR") {
-            const title = GamesID.locale[1].title[0].toLowerCase();
-            isTitleAlreadyPresent = listGames.some(game => game.locale[1].title[0].toLowerCase() === title);
-        } else {
-            const title = GamesID.locale[0].title[0].toLowerCase();
-            isTitleAlreadyPresent = listGames.some(game => game.locale[0].title[0].toLowerCase() === title);
-        }
-        if (!isTitleAlreadyPresent) {
-            listGames.push(GamesID);
-        }
-    }
-
-});
-
-showWiiGames(listGames, currentRankGames, optionFilter);
-
-async function showWiiGames(Games, currentIndex, filter, searchText) {
+// async function to use keyword await
+async function showWiiGames(Games, currentIndex, searchText) {
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
-    let howManyGameOwned = 0; // TODO à sauvegarder en base de données
     let lenGame = Games.length;
 
-    if (searchText !== undefined) {
-        let GameFiltered = [];
-        let searchTextFilter;
-        for (let i = 0; i < Games.length; i++) {
-            if (Games[i].locale[1] !== undefined || Games[i].locale[1].$.lang === "FR") {
-                searchTextFilter = Games[i].locale[1].title[0].toLowerCase();
-            } else {
-                searchTextFilter = Games[i].locale[0].title[0].toLowerCase();
-            }
+    // if (searchText !== undefined) {
+    //     let GameFiltered = [];
+    //     for (let i = 0; i < Games.length; i++) {
+    //         let titlegame = Games[i].title.toLowerCase();
+    //         titlegame = titlegame.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    //         if (titlegame.includes(searchText)) {
+    //             GameFiltered.push(Games[i]);
+    //         }
+    //     }
+    //     Games = GameFiltered;
+    // }
 
-            searchTextFilter = searchTextFilter.replace("é", "e");
-            searchTextFilter = searchTextFilter.replace("à", "a");
-            if (searchTextFilter.toLowerCase().includes(searchText)) {
-                GameFiltered.push(Games[i]);
-            }
+    if (searchText) {
+        console.log("Search" + searchText);
+        Games = Games.filter((game) => {
+            game.title = game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            return titlegame.includes(searchText);
+        });
+
+        for (let index = 0; index < 20; index++) {
+            if (Games[index]) console.log(Games[index]);
         }
-        Games = GameFiltered;
     }
 
     let maxPage = Math.ceil(Games.length / gamesOnPage);
@@ -114,7 +115,13 @@ async function showWiiGames(Games, currentIndex, filter, searchText) {
         document.getElementById("page-indicator").style.display = "block";
     }
     if (Games.length === 0) {
-        document.getElementById("no-result").textContent = "Pas de résultat pour " + searchText;
+        if (filter === "games-owned") {
+            document.getElementById("no-result").textContent = "Je ne possède aucun jeu wii";
+        } else if (filter === "games-owned") {
+            document.getElementById("no-result").textContent = "Je possède tous les jeux wii !";
+        } else {
+            document.getElementById("no-result").textContent = "Pas de résultat pour " + searchText;
+        }
         document.getElementById("page-indicator").style.display = "none";
         document.getElementById("button-haut-page").style.display = "none";
     } else {
@@ -125,41 +132,24 @@ async function showWiiGames(Games, currentIndex, filter, searchText) {
     for (let i = currentIndex; i < currentIndex + gamesOnPage; i++) {
         if (i < Games.length) {
 
-            // définition du titre
-            let gameTitle = Games[i].locale[1] && Games[i].locale[1].$.lang === "FR"
-                ? Games[i].locale[1].title[0]
-                : Games[i].locale[0].title[0];
-
-            // Date Sortie
-            const formatted_published_date = format_published_date([Games[i].date[0].$.day, Games[i].date[0].$.month, Games[i].date[0].$.year]);
-
             // Request game owned, convert to json, should return object result true of false
-            const gameOwned = await request("/jeuxpossedes", "?gameID=${Games[i].id[0]}");
+            const gameOwned = await request("/jeuxpossedes", `?gameID=${Games[i].id}`);
             const gameOwnedJson = await gameOwned.json();
 
-            // Increment howManyGameOwned variable if owned
-            if (gameOwnedJson.result) howManyGameOwned += 1;
+            // Set cover path
+            let coverPath = await testImagePath(IMG_COVERS_PATH + Games[i].id + ".png");
+            coverPath = coverPath ? IMG_COVERS_PATH : IMG_COVERS_PATH2;
 
-            let gameSynopsis;
-            if (Games[i].locale[1] && Games[i].locale[1].$.lang === "FR") {
-                if (Games[i].locale[1].synopsis[0] !== "") {
-                    gameSynopsis = Games[i].locale[1].synopsis[0];
-                } else {
-                    gameSynopsis = "Il n'y a pas de synopsis disponible pour ce jeu.";
-                }
-            } else {
-                gameSynopsis = "Il n'y a pas de synopsis disponible pour ce jeu.";
-            }
-
+            // Build object with the game's data and create a template with the module "components/gamebox.js"
             const gamebox_data = {
-                id: Games[i].id[0],
-                title: gameTitle,
-                published: formatted_published_date,
+                id: Games[i].id,
+                title: Games[i].title,
+                published: format_published_date([Games[i].day, Games[i].month, Games[i].year]),
                 genres: Games[i].genres,
                 editors: Games[i].developer,
-                synopsis: gameSynopsis,
+                synopsis: Games[i].synopsis,
                 owned: gameOwnedJson.result,
-                covers: IMG_COVERS_PATH,
+                covers: coverPath,
             };
             let templateGameBox = gamebox(gamebox_data);
 
@@ -173,7 +163,7 @@ async function showWiiGames(Games, currentIndex, filter, searchText) {
             // Add event on button add/remove
             const gameButton = lastElement.querySelector("[wii-game-button]");
             const tag_owned = lastElement.querySelector("[wii-game-owned]");
-            gameButton.addEventListener("click", (e) => { addRemoveGame(gameButton, tag_owned, Games[i].id[0], gameOwnedJson.result); });
+            gameButton.addEventListener("click", (e) => { addRemoveGame(gameButton, tag_owned, Games[i].id, gameOwnedJson.result); });
 
             //Et après on vérifie si le synopsis est trop long, dans ce cas on ajoute le bouton 'Lire la suite'
             const gameSynopsisText = document.querySelectorAll(".game-synopsis");
@@ -187,7 +177,6 @@ async function showWiiGames(Games, currentIndex, filter, searchText) {
     };
 
     readMoreButtonEvent();
-
 
     // Évenement pour détecter si on peut avancer, reculer d'une page
     const buttonNextPage = document.getElementById("next-page");
@@ -205,10 +194,9 @@ async function showWiiGames(Games, currentIndex, filter, searchText) {
     }
 
     // Display number of games owned
-    // const howMany = await fetch(HOST + `/howmanygameowned`);
-    // const howManyJson = await howMany.json();
-    // howManyJson.count;
-    document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur " + lenGame + " en tout";
+    howManyGamesOwned = await fetch(HOST + `/howmanygameowned`);
+    const howManyGamesOwnedJson = await howManyGamesOwned.json();
+    document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGamesOwnedJson.count + " jeux sur " + lenGame + " en tout";
 
 }
 
@@ -220,14 +208,7 @@ searchInput.addEventListener("input", output => {
     for (let i = 0; i < gamesPage.length; i++) {
         document.getElementById("games-list").removeChild(gamesPage[i]);
     }
-    outputSearch = output.target.value.toLowerCase();
-    outputSearch = outputSearch.replace(/é/g, "e");
-    outputSearch = outputSearch.replace(/à/g, "a");
-    outputSearch = outputSearch.replace(/î/g, "i");
-    outputSearch = outputSearch.replace(/ï/g, "i");
-    outputSearch = outputSearch.replace(/ô/g, "o");
-    outputSearch = outputSearch.replace(/ö/g, "o");
-    sessionStorage.setItem("currentRankGames", 0);
+    outputSearch = output.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     currentRankGames = 0;
     showWiiGames(listGames, currentRankGames, outputSearch);
 });
@@ -249,6 +230,7 @@ function readMoreButtonEvent() {
     }
 }
 
+
 // Event pour quand on page sur page suivante ou page précédente 
 document.getElementById("next-page").addEventListener("click", () => {
     const gamesPage = document.getElementById("games-list").querySelectorAll(".game-box");
@@ -260,8 +242,6 @@ document.getElementById("next-page").addEventListener("click", () => {
     }
     currentRankGames = currentRankGames + gamesOnPage;
     showWiiGames(listGames, currentRankGames, outputSearch);
-
-
 });
 
 document.getElementById("previous-page").addEventListener("click", () => {
@@ -274,8 +254,8 @@ document.getElementById("previous-page").addEventListener("click", () => {
     }
     currentRankGames = currentRankGames - gamesOnPage;
     showWiiGames(listGames, currentRankGames, outputSearch);
-
 });
+
 
 
 document.getElementById("filter").addEventListener('change', (e) => {
