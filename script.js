@@ -16,11 +16,12 @@ if (window.screen.width <= 486){
 
 let lengame = 0;
 
+const link_db = 'https://wii-fanny-collection.onrender.com'
 
 
 
 
-fetch("https://wii-fanny-collection.onrender.com/gamelist")
+fetch(link_db + "/gamelist")
     .then(resp =>{
         return resp.json()
     })
@@ -38,7 +39,7 @@ fetch("https://wii-fanny-collection.onrender.com/gamelist")
 function showWiiGames(Games, currentIndex, searchText){
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
     let howManyGameOwned;
-    fetch(`https://wii-fanny-collection.onrender.com/howmanygameowned`)
+    fetch(link_db + `/howmanygameowned`)
         .then(resp => {
             return resp.json();
         })
@@ -51,13 +52,7 @@ function showWiiGames(Games, currentIndex, searchText){
     if(searchText !== undefined){
         let GameFiltered = []
         for(let i = 0; i < Games.length; i++){
-            let titlegame = Games[i].title.toLowerCase();
-            titlegame = titlegame.replace(/é/g, "e")
-            titlegame = titlegame.replace(/à/g, "a")
-            titlegame = titlegame.replace(/î/g, "i")
-            titlegame = titlegame.replace(/ï/g, "i")
-            titlegame = titlegame.replace(/ô/g, "o")
-            titlegame = titlegame.replace(/ö/g, "o")
+            let titlegame = Games[i].title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
             if(titlegame.includes(searchText)){
                 GameFiltered.push(Games[i])
             }
@@ -147,7 +142,7 @@ function showWiiGames(Games, currentIndex, searchText){
             // Bouton et verif si jeux possedés
             const gameOwned = templateGameBox.querySelector("[wii-game-owned]")
             const gameButton = templateGameBox.querySelector("[wii-game-button]")
-            fetch(`https://wii-fanny-collection.onrender.com/jeuxpossedes?gameID=${gameID}`)
+            fetch(link_db + `/jeuxpossedes?gameID=${gameID}`)
                     .then(resp => resp.json())
                     .then(data => {
                         if(data.result === false){
@@ -167,7 +162,7 @@ function showWiiGames(Games, currentIndex, searchText){
                 });
             gameButton.addEventListener("click", (e) => {
                 const password = document.getElementById('mdp-value').value
-                fetch(`https://wii-fanny-collection.onrender.com/ajoutsuppr?gameID=${gameID}&password=${password}`)
+                fetch(link_db + `/ajoutsuppr?gameID=${gameID}&password=${password}`)
                     .then(resp => resp.json())
                     .then(data => {
                         if(data.result === false){
@@ -242,13 +237,7 @@ searchInput.addEventListener("input", output => {
     for(let i = 0; i < gamesPage.length; i++){
         document.getElementById("games-list").removeChild(gamesPage[i])
     } 
-    outputSearch = output.target.value.toLowerCase()
-    outputSearch = outputSearch.replace(/é/g, "e")
-    outputSearch = outputSearch.replace(/à/g, "a")
-    outputSearch = outputSearch.replace(/î/g, "i")
-    outputSearch = outputSearch.replace(/ï/g, "i")
-    outputSearch = outputSearch.replace(/ô/g, "o")
-    outputSearch = outputSearch.replace(/ö/g, "o")
+    outputSearch = output.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     sessionStorage.setItem("currentRankGames", 0)
     currentRankGames = 0;
     showWiiGames(listGames, currentRankGames, outputSearch)
@@ -310,7 +299,7 @@ document.getElementById("filter").addEventListener('change', (e) => {
         document.getElementById("games-list").removeChild(gamesPage[i])
     }
         
-    fetch("https://wii-fanny-collection.onrender.com/gamelist?filter=" + filter)
+    fetch(link_db + "/gamelist?filter=" + filter)
         .then(resp =>{
             return resp.json()
         })
