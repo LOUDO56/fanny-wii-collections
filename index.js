@@ -56,7 +56,6 @@ const db = mysql.createPool({
 cron.schedule('*/10 * * * *', () => {
 	db.query('SELECT 1', (err, data) => {
 		if (err) return console.error("Erreur durant récupération jeux", err.message)
-		res.json(data)
 	});
 });
 
