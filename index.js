@@ -43,7 +43,6 @@ cron.schedule('*/10 * * * *', () => {
 
 
 
-
 const db = mysql.createPool({
 	host: process.env.HOST,
 	user: process.env.USER,
@@ -53,6 +52,13 @@ const db = mysql.createPool({
 	enableKeepAlive: true
 })
 
+
+cron.schedule('*/10 * * * *', () => {
+	db.query('SELECT 1', (err, data) => {
+		if (err) return console.error("Erreur durant récupération jeux", err.message)
+		res.json(data)
+	});
+});
 
 app.listen(port, () => {
 	console.log("Server started at port", port)
