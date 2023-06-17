@@ -53,9 +53,9 @@ const db = mysql.createPool({
 })
 
 
-cron.schedule('*/10 * * * *', () => {
+cron.schedule('*/5 * * * *', () => {
 	db.query('SELECT 1', (err, data) => {
-		if (err) return console.error("Erreur durant récupération jeux", err.message)
+		if (err) return console.error("Erreur durant ping", err.message)
 	});
 });
 
