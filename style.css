@@ -62,6 +62,17 @@ header{
     color:#5c63c4;
 }
 
+.mdp{
+    margin: 15px 0;
+    font-size: 16px;
+    padding: 5px;
+}
+
+#error-mdp{
+    display: none;
+    color: rgb(151, 35, 35);
+}
+
 /* Search Bar */
 
 .search-bar{

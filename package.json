@@ -2,7 +2,7 @@
   "name": "wiicollections",
   "version": "1.0.0",
   "description": "Gestion de jeux pour Fanny",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
@@ -10,10 +10,10 @@
   "author": "LOUDO (Lucas LE LOUER)",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
-    "fs": "^0.0.1-security",
-    "lokijs": "^1.5.12",
+    "mysql2": "^3.3.5",
     "xml2js": "^0.6.0"
   }
 }
