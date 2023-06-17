@@ -14,8 +14,6 @@ require('dotenv').config({ path: 'mdp.env' });
 const port = process.env.PORT;
 
 cron.schedule('*/10 * * * *', () => {
-
-
 	const options = {
 	  hostname: 'wii-fanny-collection.onrender.com',
 	  port: 443,
