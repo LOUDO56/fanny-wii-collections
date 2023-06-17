@@ -1,0 +1,375 @@
+
+html{
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+}
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+body {
+    min-height: 100vh;
+    padding: 20px;
+}
+  
+main {
+    max-width: 60em;
+    margin: 0 auto;
+}
+  
+
+.img-left{
+    position: fixed;
+    top: -5px;
+    left: 0;
+}
+
+.img-right{
+    position: fixed;
+    top: 0;
+    right: 0;
+}
+
+
+
+
+
+/* Début */
+
+header{
+    text-align: center;
+}
+
+.title{
+    font-size: 50px;
+    margin-bottom: 5px;
+}
+
+.made-by{
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+
+#how-may-game-owned{
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    color:#5c63c4;
+}
+
+/* Search Bar */
+
+.search-bar{
+    position: relative;
+    width: 100%;
+    padding: 8px;
+    font-size: 17px;
+    background-color: #F0F0F0;
+    border: 1px solid #BDBDBD;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 25px;
+}
+
+/* Liste des jeux */
+
+
+.filter{
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+.filter-list{
+    font-size: 15px;
+    padding: 3px 5px;
+}
+
+
+.game-box{
+    position: relative;
+    padding: 10px;
+    padding-bottom: 0;
+    background-color: #F8F8F8;
+    border: 1px solid black;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 45px;
+}
+
+.game-header{
+    display: flex;
+    gap: 30px;
+}
+
+
+
+.game-information{
+    width: 100%;
+}
+
+
+.game-information-header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+
+
+.game-title{
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.game-synopsis{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+    white-space: pre-line;
+    width: 100%;
+
+}
+
+
+
+.read-more{
+    border: none;
+    background-color: #F8F8F8;
+    color: rgb(29, 107, 143);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 15px;
+    display: none;
+}
+
+.read-more:hover{
+    text-decoration: none;
+}
+
+.game-synopsis.truncated {
+    content: "...";
+}
+
+.game-is-owned{
+    color: #505050;
+    text-align: right;
+
+}
+
+.no, .oui{
+    margin-top: 5px;
+    float: right;
+    padding: 0 5px;
+    color: #F8F8F8;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.no{
+    background-color: #E76B6B;
+}
+
+.oui{
+    background-color: #4BC050;
+}
+
+
+
+.game-little-info{
+    display: flex;
+    gap: 40px;
+}
+
+.game-little-info p:last-child{
+    max-width: 25em;
+}
+
+.button-add-rem{
+    padding: 20px 3px;
+
+}
+
+.game-footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add, .rem{
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    color: white;
+    border-radius: 3px;
+    font-size: 15px;
+}
+
+.add{
+    background-color: #47BC2A;
+}
+
+.rem{
+    background-color: #CD422F;
+}
+
+.add:hover{
+    background-color: #31851c;
+}
+
+.rem:hover{
+    background-color: #a03223;
+}
+
+.added{
+    color: #505050;
+}
+
+
+#next-page, #previous-page{
+    visibility: hidden;
+    margin-bottom: 10px;
+    font-size: 16px;
+    padding: 7px;
+    border: 2px black solid;
+    background-color: white;
+    cursor: pointer;
+}
+
+#next-page:hover, #previous-page:hover{
+    color: rgba(0, 0, 0, 0.562);
+    border: 2px rgba(0, 0, 0, 0.562) solid;
+}
+
+#no-result{
+    text-align: center;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.pageSelect{
+    display: flex;
+    justify-content: space-between;
+}
+
+
+#button-haut-page{
+    float: left;
+    text-decoration: none;
+    color: black;
+    padding: 10px;
+    border: 2px solid black;
+    margin-bottom: 20px;
+}
+
+@media screen and (max-width: 1790px){
+
+    .img-left{
+        left: -5em;
+    }
+    
+    .img-right{
+        right: -5em;
+    }
+    
+}
+
+
+
+@media screen and (max-width: 1666px){
+
+    .img-left{
+        display: none;
+    }
+    
+    .img-right{
+        display: none;
+    }
+    
+}
+
+
+@media screen and (max-width: 582px){
+
+
+    .game-little-info{
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        font-size: 14px;
+    }
+
+
+    .game-information{
+        font-size: 14px;
+    }
+
+    .img-cover img{
+        width: 110px;
+    }
+
+    .game-footer{
+        flex-direction: column;
+    }
+    
+
+}
+
+
+@media screen and (max-width: 486px){
+
+    .title{
+        font-size: 30px;
+    }
+
+    .game-header{
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .game-information-header{
+        flex-direction: column;
+    }
+
+    .game-is-owned{
+        margin-top: 15px;
+        text-align: left;
+    }
+
+    .no, .oui{
+        float: left;
+        margin-bottom: 15px;
+    }
+
+    .game-little-info{
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        font-size: 14px;
+    }
+
+
+    .game-information{
+        font-size: 14px;
+    }
+
+    .img-cover img{
+        width: 150px;
+    }
+
+    .game-footer{
+        flex-direction: column;
+    }
+    
+
+}
+
