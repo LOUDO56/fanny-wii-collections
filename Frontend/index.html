@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="script.js" defer></script>
+        <link rel="stylesheet" href="style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,600;1,700&display=swap" rel="stylesheet">
+        <link rel="icon" href="Images/Deco/wii_logo.png" type="image/icon type">
+        <title>Collection Jeu Wii Fanny</title>
+    </head>
+    <body>
+        <header>
+            <h1 class="title" id="haut-page">Collection Jeu Wii Fanny</h1>
+            <p class="made-by">Fait avec ❤️ par ton fils</p>
+            <p id="how-may-game-owned"></p>
+            <p id="security-mdp">Pour des raisons de sécurité, il faut que tu tapes ton mot de passe avant de pouvoir intéragir.</p>
+            <input type="password" name="mdp" class="mdp" id="mdp-value" placeholder="Tape ton mot de passe">
+        </header>
+        <img src="Images/Deco/Mario_left.png" alt="Mario galaxie gauche" class="img-left">
+        <img src="Images/Deco/Link_right.png" alt="Link totk" class="img-right">
+        <main>
+            <input class="search-bar" type="search" id="search" placeholder="Rechercher un jeu par son nom" autocomplete="off">
+            <div class="filter">
+                <label for="filter-owned">Trier par:</label>
+                <select name="filter" id="filter" class="filter-list">
+                    <option value="all-games" selected="selected">Tous les jeux</option>
+                    <option value="games-owned">Jeux possédés</option>
+                    <option value="games-not-owned">Jeux non possédés</option>
+                </select>
+            </div>
+            <div class="pageSelect">
+                <button id="previous-page">← Page précedente</button>
+                <button id="next-page">Page suivante →</button>
+            </div>
+            <div id="page-indicator"></div>
+            <div id="games-list" wii-games-container></div>
+            <div id="no-result"></div>
+            <template wii-games-template>
+                <div class="game-box">
+                    <div class="game-header">
+                        <div class="img-cover"><img wii-game-cover/></div>
+                        <div class="game-information">
+                            <div class="game-information-header">
+                                <p class="game-title" wii-game-title></p>
+                                <div>
+                                    <p class="game-is-owned">Dans la collection <p wii-game-owned></p></p>
+                                </div>
+                            </div>
+                            <div class="game-information-body">
+                                <div class="game-little-info">
+                                    <p class="game-published" wii-game-published><strong>Sortie:</strong></p>
+                                    <p class="game-genres" wii-game-genres><strong>Genres:</strong></p>
+                                    <p class="game-editors" wii-game-editors><strong>Développeurs:</strong></p>
+                                </div>
+                                <div class="game-synopsis" wii-game-synopsis>
+                                    <strong>Synopsis:</strong>
+                                </div>
+                                <button class="read-more">Lire la suite</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="game-footer">
+                        <div class="button-add-rem">
+                            <button wii-game-button></button>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <a href="#haut-page" id="button-haut-page">Revenir en haut</a>
+        </main>
+    </body>
+</html>
