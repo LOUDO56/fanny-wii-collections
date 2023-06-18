@@ -16,7 +16,7 @@ if (window.screen.width <= 486){
 
 let lengame = 0;
 
-const link_db = 'http://localhost:4000'
+const link_db = 'https://wii-fanny-collection.onrender.com'
 
 
 
