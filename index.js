@@ -8,7 +8,7 @@ const xml2js = require('xml2js');
 const mysql = require('mysql2');
 const cors = require('cors');
 const app = express();
-require('dotenv').config({ path: 'Backend/mdp.env' });
+require('dotenv').config({ path: 'mdp.env' });
 const port = process.env.PORT;
 
 const db = mysql.createPool({
