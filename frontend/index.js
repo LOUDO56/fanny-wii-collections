@@ -1,11 +1,16 @@
 import { gamebox } from "./components/gamebox.js";
+import conf from "./config.js";
 
 // Just have to change this to https://wii-fanny-collection.onrender.com for it to work for deployment
-const HOST = "http://localhost:4000";
-const IMG_PATH = "frontend/Img";
-const IMG_COVERS_PATH = IMG_PATH + "/Wii_covers-1/";
-const IMG_COVERS_PATH2 = IMG_PATH + "/Wii_covers-2/";
-const MDP_INPUT = document.getElementById('mdp-value');
+const HOST = conf.HOST,
+    IMG_PATH = conf.IMG_PATH,
+    IMG_COVERS_PATH = conf.IMG_COVERS_PATH,
+    IMG_COVERS_PATH2 = conf.IMG_COVERS_PATH2,
+    MDP_INPUT = conf.MDP_INPUT,
+    page_indicator = conf.page_indicator,
+    no_result = conf.no_result,
+    button_haut_page = conf.button_haut_page;
+
 
 let filter;
 let howManyGamesOwned = 0;
@@ -37,28 +42,27 @@ const format_published_date = (date) => {
 const addRemoveGame = async (button, tag_owned, gameID) => {
     const password = MDP_INPUT.value;
     const addOrRemove = await request("/ajoutsuppr", `?gameID=${gameID}&password=${password}`);
-    const addOrRemoveJson = await addOrRemove.json();
-
-    if (addOrRemoveJson.result) {
-        if (!addOrRemoveJson.result) {
-            button.classList.add("rem");
-            button.textContent = "➖ Supprimer de ma collection";
-            tag_owned.classList.remove("no");
-            tag_owned.classList.add("oui");
-            tag_owned.innerHTML = "OUI";
-            document.getElementById("how-may-game-owned").textContent = "J'ai " + (howManyGamesOwnedJson.count + 1) + " jeux sur " + lenGame + " en tout";
-        } else {
-            button.classList.remove("rem");
-            button.classList.add("add");
-            button.textContent = "➕ Ajouter à ma collection";
-            tag_owned.classList.remove("oui");
-            tag_owned.classList.add("no");
-            tag_owned.innerHTML = "NON";
-            document.getElementById("how-may-game-owned").textContent = "J'ai " + (howManyGamesOwnedJson.count - 1) + " jeux sur " + lenGame + " en tout";
+    if (addOrRemove.status == 200) {
+        const addOrRemoveJson = await addOrRemove.json();
+        if (addOrRemoveJson.result) {
+            if (!addOrRemoveJson.result) {
+                button.classList.add("rem");
+                button.textContent = "➖ Supprimer de ma collection";
+                tag_owned.classList.remove("no");
+                tag_owned.classList.add("oui");
+                tag_owned.innerHTML = "OUI";
+                document.getElementById("how-may-game-owned").textContent = "J'ai " + (howManyGamesOwnedJson.count + 1) + " jeux sur " + lenGame + " en tout";
+            } else {
+                button.classList.remove("rem");
+                button.classList.add("add");
+                button.textContent = "➕ Ajouter à ma collection";
+                tag_owned.classList.remove("oui");
+                tag_owned.classList.add("no");
+                tag_owned.innerHTML = "NON";
+                document.getElementById("how-may-game-owned").textContent = "J'ai " + (howManyGamesOwnedJson.count - 1) + " jeux sur " + lenGame + " en tout";
+            }
         }
     }
-
-    // 
 };
 
 // Test if path to image valid
@@ -82,51 +86,34 @@ async function showWiiGames(Games, currentIndex, searchText) {
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
     let lenGame = Games.length;
 
-    // if (searchText !== undefined) {
-    //     let GameFiltered = [];
-    //     for (let i = 0; i < Games.length; i++) {
-    //         let titlegame = Games[i].title.toLowerCase();
-    //         titlegame = titlegame.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    //         if (titlegame.includes(searchText)) {
-    //             GameFiltered.push(Games[i]);
-    //         }
-    //     }
-    //     Games = GameFiltered;
-    // }
-
     if (searchText) {
-        console.log("Search" + searchText);
         Games = Games.filter((game) => {
             game.title = game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            return titlegame.includes(searchText);
+            return game.title.includes(searchText);
         });
-
-        for (let index = 0; index < 20; index++) {
-            if (Games[index]) console.log(Games[index]);
-        }
     }
 
     let maxPage = Math.ceil(Games.length / gamesOnPage);
     let currentPage = Math.ceil(currentIndex / gamesOnPage) + 1;
-    document.getElementById("page-indicator").innerHTML = "Page " + currentPage + " sur " + maxPage;
+    page_indicator.innerHTML = "Page " + currentPage + " sur " + maxPage;
     if (currentPage === maxPage) {
-        document.getElementById("page-indicator").style.display = "none";
+        page_indicator.style.display = "none";
     } else {
-        document.getElementById("page-indicator").style.display = "block";
+        page_indicator.style.display = "block";
     }
     if (Games.length === 0) {
         if (filter === "games-owned") {
-            document.getElementById("no-result").textContent = "Je ne possède aucun jeu wii";
+            no_result.textContent = "Je ne possède aucun jeu wii";
         } else if (filter === "games-owned") {
-            document.getElementById("no-result").textContent = "Je possède tous les jeux wii !";
+            no_result.textContent = "Je possède tous les jeux wii !";
         } else {
-            document.getElementById("no-result").textContent = "Pas de résultat pour " + searchText;
+            no_result.textContent = "Pas de résultat pour " + searchText;
         }
-        document.getElementById("page-indicator").style.display = "none";
-        document.getElementById("button-haut-page").style.display = "none";
+        page_indicator.style.display = "none";
+        button_haut_page.style.display = "none";
     } else {
-        document.getElementById("no-result").textContent = "";
-        document.getElementById("button-haut-page").style.display = "block";
+        no_result.textContent = "";
+        button_haut_page.style.display = "block";
     }
 
     for (let i = currentIndex; i < currentIndex + gamesOnPage; i++) {
@@ -151,7 +138,7 @@ async function showWiiGames(Games, currentIndex, searchText) {
                 owned: gameOwnedJson.result,
                 covers: coverPath,
             };
-            let templateGameBox = gamebox(gamebox_data);
+            let templateGameBox = gamebox(gamebox_data); // create HTML template components/gamebox 
 
             // Ensuite on ajoute la div
             wiiGameListContainer.insertAdjacentHTML('beforeend', templateGameBox);
@@ -194,7 +181,7 @@ async function showWiiGames(Games, currentIndex, searchText) {
     }
 
     // Display number of games owned
-    howManyGamesOwned = await fetch(HOST + `/howmanygameowned`);
+    howManyGamesOwned = await request(`/howmanygameowned`);
     const howManyGamesOwnedJson = await howManyGamesOwned.json();
     document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGamesOwnedJson.count + " jeux sur " + lenGame + " en tout";
 
