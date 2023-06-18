@@ -11,11 +11,6 @@ const app = express();
 require('dotenv').config({ path: 'mdp.env' });
 const port = process.env.PORT;
 
-var corsOptions = {
-	origin: 'http://localhost:5500',
-	optionsSuccessStatus: 200 // For legacy browser support
-};
-app.use(cors(corsOptions));
 
 const db = mysql.createPool({
 	host: process.env.HOST,
@@ -30,8 +25,13 @@ app.listen(port, () => {
 	console.log("Server started at port", port);
 });
 
-app.use(cors());
 
+var corsOptions = {
+	origin: 'http://localhost:5500',
+	optionsSuccessStatus: 200 // For legacy browser support
+};
+
+app.use(cors(corsOptions));
 
 
 // --------- Partie intéraction --------- //
