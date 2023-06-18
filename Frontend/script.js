@@ -92,9 +92,9 @@ function showWiiGames(Games, currentIndex, searchText){
             const gameCover = templateGameBox.querySelector("[wii-game-cover]")
             const gameID = Games[i].id
             //Définiton de l'image
-            gameCover.src = "Images/Covers/Wii_Covers-1/" + gameID + ".png"
+            gameCover.src = "Frontend/Images/Covers/Wii_Covers-1/" + gameID + ".png"
             gameCover.addEventListener('error', () => {
-                gameCover.src = "Images/Covers/Wii_Covers-2/" + gameID + ".png"
+                gameCover.src = "Frontend/Images/Covers/Wii_Covers-2/" + gameID + ".png"
             })
             gameCover.alt = "Pas de cover trouvé pour ce jeu"
 
