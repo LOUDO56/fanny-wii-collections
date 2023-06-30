@@ -141,25 +141,57 @@ function showWiiGames(Games, currentIndex, searchText){
 
             // Bouton et verif si jeux possedés
             const gameOwned = templateGameBox.querySelector("[wii-game-owned]")
-            const gameButton = templateGameBox.querySelector("[wii-game-button]")
+            const gameButton = templateGameBox.querySelector("[wii-game-button-collection]")
+            const wishListButton = templateGameBox.querySelector("[wii-game-button-wishlist]")
             fetch(link_db + `/jeuxpossedes?gameID=${gameID}`)
+                .then(resp => resp.json())
+                .then(data => {
+                    if(data.result === false){
+                        gameButton.classList.toggle("add")
+                        gameButton.textContent = "➕ Ajouter à ma collection"
+                        gameOwned.classList.toggle("no")
+                        gameOwned.innerHTML = "NON"
+                    } else {
+                        wishListButton.style.display = "none";
+                        gameButton.classList.toggle("rem")
+                        gameButton.textContent = "➖ Supprimer de ma collection"
+                        gameOwned.classList.toggle("oui")
+                        gameOwned.innerHTML = "OUI"
+                    }
+                    })
+                .catch(error => {
+                    console.log('Erreur lors de la requête :', error);
+            });
+
+            fetch(link_db + `/inwishlist?gameID=${gameID}`)
+                .then(resp => resp.json())
+                .then(data => {
+                    if(data.result === true){
+                        wishListButton.innerHTML = "Ajouter de ma liste de souhait"
+                    } else {
+                        wishListButton.innerHTML = "Supprimer de ma liste de souhait"
+                    }
+                    })
+                .catch(error => {
+                    console.log('Erreur lors de la requête :', error);
+            });
+
+            wishListButton.addEventListener("click", () => {
+                const password = document.getElementById('mdp-value').value
+                fetch(link_db + `/wishlist?gameID=${gameID}&password=${password}`)
                     .then(resp => resp.json())
                     .then(data => {
-                        if(data.result === false){
-                            gameButton.classList.toggle("add")
-                            gameButton.textContent = "➕ Ajouter à ma collection"
-                            gameOwned.classList.toggle("no")
-                            gameOwned.innerHTML = "NON"
+                        console.log(data.result)
+                        if(data.result === true){
+                            wishListButton.innerHTML = "Suppriner de ma liste de souhait"
                         } else {
-                            gameButton.classList.toggle("rem")
-                            gameButton.textContent = "➖ Supprimer de ma collection"
-                            gameOwned.classList.toggle("oui")
-                            gameOwned.innerHTML = "OUI"
+                            wishListButton.innerHTML = "Ajouter à ma liste de souhait"
                         }
-                        })
+                    })
                     .catch(error => {
                         console.log('Erreur lors de la requête :', error);
                 });
+            });
             gameButton.addEventListener("click", (e) => {
                 const password = document.getElementById('mdp-value').value
                 fetch(link_db + `/ajoutsuppr?gameID=${gameID}&password=${password}`)
@@ -187,6 +219,9 @@ function showWiiGames(Games, currentIndex, searchText){
                     .catch(error => {
                         console.log('Erreur lors de la requête :', error);
                 });
+            
+
+    
             });
                     
             

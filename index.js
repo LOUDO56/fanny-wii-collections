@@ -32,12 +32,15 @@ app.use(cors())
 
 
 
+
+
 //Fonction principale pour retourner les jeux
 app.get("/gamelist", (req, res) => {
 	const request = req.query.filter;
 	let sql = `SELECT * FROM wiigames ORDER BY title;`
 	if(request === 'games-owned') {sql = `SELECT * FROM wiigames WHERE owned = true ORDER BY title;`}
 	if(request === 'games-not-owned') {sql = `SELECT * FROM wiigames WHERE owned = false ORDER BY title;`}
+	if(request === 'wish-list') {sql = `SELECT * FROM wiigames INNER JOIN wish_list ON wiigames.id = wish_list.id;`}
 	db.query(sql, (err, data) => {
 		if (err) return console.error("Erreur durant récupération jeux", err.message)
 		res.json(data)
@@ -93,8 +96,43 @@ app.get('/ajoutsuppr', (req, res) => {
 				db.query(`UPDATE wiigames SET owned = 1 WHERE id = ?;`, [gameID], (err) => {
 					if (err) return console.error("Error during inserting game owned to database: ", err.message);
 				});
+				db.query(`DELETE FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
+					if (err) {console.error('Erreur lors de l\'exécution de la requête :', err.message);}
+				})
 				res.json({result: false})
 			}
+		}
+	});
+});
+
+
+app.get('/wishlist', (req, res) => {
+	if(req.query.password !== process.env.MDP){return;}
+	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
+	db.query(`SELECT id FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
+		if (err) { console.error('Erreur lors de l\'exécution de la requête :', err.message);}
+		else {
+			if(row[0] === undefined){
+				db.query(`INSERT INTO wish_list (id) VALUES (?);`, [gameID], (err, row) => {
+					if (err) {console.error('Erreur lors de l\'exécution de la requête :', err.message);}
+				})
+			} else {
+				db.query(`DELETE FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
+					if (err) {console.error('Erreur lors de l\'exécution de la requête :', err.message);}
+				})
+			}
+			res.json({result: row[0] === undefined})
+		}
+		
+	});
+});
+
+app.get('/inwishlist', (req, res) => {
+	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
+	db.query(`SELECT id FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
+		if (err) { console.error('Erreur lors de l\'exécution de la requête :', err.message);}
+		else {
+			res.json({result: row[0] === undefined})
 		}
 	});
 });

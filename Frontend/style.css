@@ -205,16 +205,26 @@ header{
     max-width: 25em;
 }
 
-.button-add-rem{
-    padding: 20px 3px;
-
+.button-action{
+    margin: 20px 3px;
 }
 
-.game-footer{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.button-wishlist{
+    padding: 5px 10px;
+    border: 2px black solid;
+    cursor: pointer;
+    color: black;
+    border-radius: 3px;
+    font-size: 15px;
+    background-color: white;
 }
+
+
+.button-wishlist:hover{
+    background-color: rgb(230, 230, 230);
+}
+
+
 
 .add, .rem{
     padding: 5px 10px;

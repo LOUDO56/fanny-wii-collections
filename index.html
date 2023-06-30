@@ -30,6 +30,7 @@
                     <option value="all-games" selected="selected">Tous les jeux</option>
                     <option value="games-owned">Jeux possédés</option>
                     <option value="games-not-owned">Jeux non possédés</option>
+                    <option value="wish-list">Liste de souhait</option>
                 </select>
             </div>
             <div class="pageSelect">
@@ -65,8 +66,11 @@
                     </div>
                     <hr>
                     <div class="game-footer">
-                        <div class="button-add-rem">
-                            <button wii-game-button></button>
+                        <div class="button-action">
+                            <button wii-game-button-collection></button>
+                        </div>
+                        <div class="button-action">
+                            <button class="button-wishlist" wii-game-button-wishlist></button>
                         </div>
                     </div>
                 </div>
