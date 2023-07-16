@@ -17,6 +17,7 @@ if (window.screen.width <= 486){
 let lengame = 0;
 
 const link_db = 'https://wii-fanny-collection.onrender.com'
+// const link_db = 'http://localhost:4000'
 
 
 
@@ -35,7 +36,6 @@ fetch(link_db + "/gamelist")
     )
 
 
-
 function showWiiGames(Games, currentIndex, searchText){
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
     let howManyGameOwned;
@@ -50,14 +50,11 @@ function showWiiGames(Games, currentIndex, searchText){
         })
 
     if(searchText !== undefined){
-        let GameFiltered = []
-        for(let i = 0; i < Games.length; i++){
-            let titlegame = Games[i].title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            if(titlegame.includes(searchText)){
-                GameFiltered.push(Games[i])
-            }
-        }
-        Games = GameFiltered;
+        Games = Games.filter(game => {
+            let titlegame = game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            return titlegame.includes(searchText) || game.id.toLowerCase() === searchText;
+        });
+        
 
     }
         
@@ -75,6 +72,8 @@ function showWiiGames(Games, currentIndex, searchText){
             document.getElementById("no-result").textContent = "Je ne possède aucun jeu wii"
         } else if (filter === "games-owned"){
             document.getElementById("no-result").textContent = "Je possède tous les jeux wii !"
+        } else if (filter === "wish-list"){
+            document.getElementById("no-result").textContent = "Je n'ai pas ajouté de souhait"
         } else {
             document.getElementById("no-result").textContent = "Pas de résultat pour " + searchText
         }
@@ -91,12 +90,14 @@ function showWiiGames(Games, currentIndex, searchText){
             const gameTitle = templateGameBox.querySelector("[wii-game-title]")
             const gameCover = templateGameBox.querySelector("[wii-game-cover]")
             const gameID = Games[i].id
-            //Définiton de l'image
-            gameCover.src = "Frontend/Images/Covers/Wii_Covers-1/" + gameID + ".png"
-            gameCover.addEventListener('error', () => {
-                gameCover.src = "Frontend/Images/Covers/Wii_Covers-2/" + gameID + ".png"
-            })
-            gameCover.alt = "Pas de cover trouvé pour ce jeu"
+            gameCover.alt = "Games ID " + Games[i].id;
+            //Définiton de l'image a partir du serveur pour éviter les erreurs
+            gameCover.src = "Frontend/Images/Covers/cover_loading.png"
+            fetch(link_db + `/img?gameID=${gameID}`)
+                .then(resp => resp.json())
+                .then(data => {
+                    gameCover.src = data.img_path;
+                })
 
             //définition du titre
 
@@ -167,7 +168,7 @@ function showWiiGames(Games, currentIndex, searchText){
                 .then(resp => resp.json())
                 .then(data => {
                     if(data.result === true){
-                        wishListButton.innerHTML = "Ajouter de ma liste de souhait"
+                        wishListButton.innerHTML = "Ajouter à ma liste de souhait"
                     } else {
                         wishListButton.innerHTML = "Supprimer de ma liste de souhait"
                     }
@@ -181,7 +182,6 @@ function showWiiGames(Games, currentIndex, searchText){
                 fetch(link_db + `/wishlist?gameID=${gameID}&password=${password}`)
                     .then(resp => resp.json())
                     .then(data => {
-                        console.log(data.result)
                         if(data.result === true){
                             wishListButton.innerHTML = "Suppriner de ma liste de souhait"
                         } else {
@@ -261,11 +261,13 @@ function showWiiGames(Games, currentIndex, searchText){
         buttonPreviousPage.style.visibility = "visible";
     }
 
+
 }
 
 
 //  Code de recherche
 let outputSearch;
+let link
 const searchInput = document.getElementById("search")
 searchInput.addEventListener("input", output => {
     const gamesPage = document.getElementById("games-list").querySelectorAll(".game-box")
@@ -273,11 +275,17 @@ searchInput.addEventListener("input", output => {
         document.getElementById("games-list").removeChild(gamesPage[i])
     } 
     outputSearch = output.target.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    let titleToSearch = outputSearch.replaceAll(" ", "+")
+    link = `https://www.gametdb.com/Wii/Search?action=search&q=group%3DWii&submit=Search&id=&region=&type=%3DWii&title_EN=${titleToSearch}&title_FR=&title_DE=&title_ES=&title_IT=&title_NL=&title_PT=&title_SE=&title_DK=&title_NO=&title_FI=&title_GR=&title_TR=&title_JA=&title_KO=&title_ZHTW=&title_ZHCN=&title_RU=&developer=&publisher=&year=&month=&day=&genre=&rating=&descriptor=&players=&acc_other=&online_players=&online_online=&online_download=&online_score=&online_messageboard=&online_nintendods=&online_wiimmfi=&size_1=&crc=&md5=&sha1=&case_color=`
     sessionStorage.setItem("currentRankGames", 0)
     currentRankGames = 0;
     showWiiGames(listGames, currentRankGames, outputSearch)
 })
 
+
+document.getElementById("search_id").addEventListener("click", () => {
+    window.open(link, "_blank")
+})
 
 // Fonction pour l'évent lire la suite
 function readMoreButtonEvent(){

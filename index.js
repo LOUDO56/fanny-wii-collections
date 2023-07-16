@@ -31,7 +31,17 @@ app.use(cors())
 // --------- Partie intéraction --------- //
 
 
+app.get("/img", (req, res) => {
+	const gameID = req.query.gameID;
+	if(fs.existsSync("Frontend/Images/Covers/Wii_Covers-1/" + gameID + ".png")){
+		res.json({img_path: "Frontend/Images/Covers/Wii_Covers-1/" + gameID + ".png"})
+	} else if(fs.existsSync("Frontend/Images/Covers/Wii_Covers-2/" + gameID + ".png")){
+		res.json({img_path: "Frontend/Images/Covers/Wii_Covers-2/" + gameID + ".png"})
+	} else {
+		res.json({img_path: "Frontend/Images/Covers/cover_not_found.png"})
+	}
 
+})
 
 
 //Fonction principale pour retourner les jeux
