@@ -35,6 +35,7 @@
                     <option value="wish-list">Liste de souhait</option>
                 </select>
             </div>
+            <p class="dev-mode"></p>
             <div class="pageSelect">
                 <button id="previous-page">← Page précedente</button>
                 <button id="next-page">Page suivante →</button>
@@ -50,7 +51,7 @@
                             <div class="game-information-header">
                                 <p class="game-title" wii-game-title></p>
                                 <div>
-                                    <p class="game-is-owned">Dans la collection <p wii-game-owned></p></p>
+                                    <p class="game-is-owned">Dans la collection <p wii-game-owned class="loading yes-no">?</p></p>
                                 </div>
                             </div>
                             <div class="game-information-body">
@@ -69,7 +70,7 @@
                     <hr>
                     <div class="game-footer">
                         <div class="button-action">
-                            <button wii-game-button-collection></button>
+                            <button wii-game-button-collection class="loading add-rem">Chargement...</button>
                         </div>
                         <div class="button-action">
                             <button class="button-wishlist" wii-game-button-wishlist></button>

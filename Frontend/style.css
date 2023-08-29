@@ -188,7 +188,7 @@ header{
 
 }
 
-.no, .oui{
+.no, .oui, .loading.yes-no{
     margin-top: 5px;
     float: right;
     padding: 0 5px;
@@ -198,11 +198,11 @@ header{
 }
 
 .no{
-    background-color: #E76B6B;
+    background-color: #E76B6B !important;
 }
 
 .oui{
-    background-color: #4BC050;
+    background-color: #4BC050 !important;
 }
 
 
@@ -228,6 +228,7 @@ header{
     border-radius: 3px;
     font-size: 15px;
     background-color: white;
+    display: none;
 }
 
 
@@ -237,13 +238,17 @@ header{
 
 
 
-.add, .rem{
+.add, .rem, .loading.add-rem{
     padding: 5px 10px;
     border: none;
     cursor: pointer;
     color: white;
     border-radius: 3px;
     font-size: 15px;
+}
+
+.loading{
+    background-color: gray;
 }
 
 .add{

@@ -19,8 +19,7 @@ let lengame = 0;
 const link_db = 'https://wii-fanny-collection.onrender.com'
 // const link_db = 'http://localhost:4000'
 
-
-
+if(link_db.includes('localhost')){document.querySelector('.dev-mode').textContent = 'Mode développeur activé'} // Savoir si je suis sur localhost ou non
 
 fetch(link_db + "/gamelist")
     .then(resp =>{
@@ -49,10 +48,12 @@ function showWiiGames(Games, currentIndex, searchText){
             document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur " + lengame + " en tout"
         })
 
+    // Filtre de recherche
     if(searchText !== undefined){
+        const keyWords = searchText.split(' ')
         Games = Games.filter(game => {
-            let titlegame = game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-            return titlegame.includes(searchText) || game.id.toLowerCase() === searchText;
+            let titlegame = game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // enlève les accents
+            return keyWords.every(keyWord => titlegame.includes(keyWord))
         });
         
 
@@ -62,11 +63,13 @@ function showWiiGames(Games, currentIndex, searchText){
     let maxPage = Math.ceil(Games.length / gamesOnPage);
     let currentPage = Math.ceil(currentIndex / gamesOnPage)+1;
     document.getElementById("page-indicator").innerHTML =  "Page " + currentPage + " sur " + maxPage
+
     if(currentPage === maxPage){
         document.getElementById("page-indicator").style.display = "none"
     } else {
         document.getElementById("page-indicator").style.display = "block"
     }
+
     if(Games.length === 0){
         if (filter === "games-owned"){
             document.getElementById("no-result").textContent = "Je ne possède aucun jeu wii"
@@ -152,6 +155,7 @@ function showWiiGames(Games, currentIndex, searchText){
                         gameButton.textContent = "➕ Ajouter à ma collection"
                         gameOwned.classList.toggle("no")
                         gameOwned.innerHTML = "NON"
+                        wishListButton.style.display = 'block'
                     } else {
                         wishListButton.style.display = "none";
                         gameButton.classList.toggle("rem")
@@ -183,7 +187,7 @@ function showWiiGames(Games, currentIndex, searchText){
                     .then(resp => resp.json())
                     .then(data => {
                         if(data.result === true){
-                            wishListButton.innerHTML = "Suppriner de ma liste de souhait"
+                            wishListButton.innerHTML = "Supprimer de ma liste de souhait"
                         } else {
                             wishListButton.innerHTML = "Ajouter à ma liste de souhait"
                         }
