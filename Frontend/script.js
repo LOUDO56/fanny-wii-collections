@@ -53,7 +53,7 @@ function showWiiGames(Games, currentIndex, searchText){
         const keyWords = searchText.split(' ')
         Games = Games.filter(game => {
             let titlegame = game.title.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // enlève les accents
-            return keyWords.every(keyWord => titlegame.includes(keyWord))
+            return keyWords.every(keyWord => titlegame.includes(keyWord)) || game.id.toLowerCase() === searchText;
         });
         
 
