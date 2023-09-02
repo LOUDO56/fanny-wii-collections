@@ -17,7 +17,8 @@ if (window.screen.width <= 486){
 let lengame = 0;
 
 // const link_db = 'https://wii-fanny-collection.onrender.com'
-const link_db = 'https://fannywiicollec.ddns.net'
+//const link_db = 'https://fannywiicollec.ddns.net'
+const link_db = 'http://192.168.1.41:4000'
 // const link_db = 'http://localhost:4000'
 
 if(link_db.includes('localhost')){document.querySelector('.dev-mode').textContent = 'Mode développeur activé'} // Savoir si je suis sur localhost ou non
