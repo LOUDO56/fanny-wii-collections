@@ -18,7 +18,7 @@ let lengame = 0;
 
 // const link_db = 'https://wii-fanny-collection.onrender.com'
 const link_db = 'https://fannywiicollec.ddns.net'
-// const link_db = 'http://localhost:4000'
+// const link_db = 'http://192.168.1.41:4000'
 
 if(link_db.includes('localhost')){document.querySelector('.dev-mode').textContent = 'Mode développeur activé'} // Savoir si je suis sur localhost ou non
 
@@ -141,6 +141,9 @@ function showWiiGames(Games, currentIndex, searchText){
             //Synopsis
 
             const gameSynopsis = templateGameBox.querySelector("[wii-game-synopsis]")
+            Games[i].synopsis = Games[i].synopsis.replaceAll("\\n", "\n")
+            Games[i].synopsis = Games[i].synopsis.replaceAll("\\r", "")
+            Games[i].synopsis = Games[i].synopsis.replaceAll('\\"', "\"")
             gameSynopsis.innerHTML += Games[i].synopsis
 
 

@@ -406,6 +406,10 @@ header{
     .game-footer{
         flex-direction: column;
     }
+
+    .no, .oui, .loading.yes-no{
+        float: left;
+    }
     
 
 }
