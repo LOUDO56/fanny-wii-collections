@@ -8,7 +8,6 @@ const xml2js = require('xml2js');
 const sqlite3 = require('sqlite3').verbose()
 const cors = require('cors');
 const app = express();
-require('dotenv').config({ path: 'mdp.env' });
 const port = 4000;
 
 let db = new sqlite3.Database('wiigames.db')
@@ -83,7 +82,7 @@ app.get('/jeuxpossedes', (req, res) => {
 
 // Fonction qui permet d'ajouter un jeu ou le supprimer
 app.get('/ajoutsuppr', (req, res) => {
-	if(req.query.password !== process.env.MDP){return;}
+	// if(req.query.password !== process.env.MDP){return;} Only needed on server side
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
 	db.get(`SELECT owned FROM wiigames WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) {
@@ -109,7 +108,7 @@ app.get('/ajoutsuppr', (req, res) => {
 
 
 app.get('/wishlist', (req, res) => {
-	if(req.query.password !== process.env.MDP){return;}
+	// if(req.query.password !== process.env.MDP){return;} Only needed on server side
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
 	db.get(`SELECT id FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) { console.error('Erreur lors de l\'exécution de la requête :', err.message);}
