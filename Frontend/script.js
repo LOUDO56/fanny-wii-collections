@@ -224,7 +224,7 @@ function showWiiGames(Games, currentIndex, searchText){
                             gameOwned.innerHTML = "NON"
                             howManyGameOwned--;
                         }
-                        document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur 1268 en tout"
+                        document.getElementById("how-may-game-owned").textContent = "J'ai " + howManyGameOwned + " jeux sur " + lengame + " en tout"
                     })
                     .catch(error => {
                         console.log('Erreur lors de la requête :', error);
