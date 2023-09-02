@@ -1,5 +1,6 @@
 # fanny-wii-collections
 This projects is for my mother who is collectionning all the Wii Games from Europe<br/>
+**This project is only in French, all translations are up to you.**
 
 # How this work
 
@@ -10,6 +11,28 @@ This website use a database where I put all wii games from Europe who includes E
 
 The website does not work for more than one person because the purpose of this project is to be accessible only to my mother.<br/>
 If you want to use it in your own, just download the source code in ZIP file and modify things on your own.<br/>
+
+# How to use it for your own
+
+- Install [NodeJS](https://nodejs.org/fr) (In case you haven't yet)
+- Create a directory, open it, right click and click on "Open in Terminal" **OR** copy the path of your directory, open your terminal and type `cd {path_of_your_directory}`
+- Type `git clone https://github.com/LOUDO56/fanny-wii-collections.git` **OR** download it as ZIP file by cliking on `<> Code` and `Download ZIP`
+
+  
+  ![image](https://github.com/LOUDO56/fanny-wii-collections/assets/117168736/454327ad-c0b4-420f-9f43-a13606a9d75e)
+  
+- Type `npm install package.json` in your terminal
+- Edit `index.js`, remove line 86 and 112
+- Edit `index.html`, remove line 17, 18, 19 and 20
+- Edit `script.js`, go to line 19, and remove all `link_db` instead of `const link_db = 'http://localhost:4000'`
+- Go to your terminal and type `node index.js`
+- Open `index.html` file
+- Kaboom! Fully interactive wii games list :)
+
+
+# LICENSE
+
+This project is under [MIT License](https://github.com/LOUDO56/fanny-wii-collections/blob/main/LICENSE)
 
 # Special Thanks
 
