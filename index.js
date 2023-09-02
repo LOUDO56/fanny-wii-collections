@@ -9,7 +9,7 @@ const sqlite3 = require('sqlite3').verbose()
 const cors = require('cors');
 const app = express();
 require('dotenv').config({ path: 'mdp.env' });
-const port = process.env.PORT;
+const port = 4000;
 
 let db = new sqlite3.Database('wiigames.db')
 
