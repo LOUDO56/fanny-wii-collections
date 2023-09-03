@@ -7,8 +7,9 @@ const fs = require('fs');
 const xml2js = require('xml2js');
 const sqlite3 = require('sqlite3').verbose()
 const cors = require('cors');
+const { send } = require('process');
 const app = express();
-const port = 4000;
+const port = 4001;
 
 let db = new sqlite3.Database('wiigames.db')
 
@@ -16,21 +17,28 @@ app.listen(port, () => {
 	console.log("Server started at port", port)
 });
 
-app.use(cors())
+app.use(cors());
 
 
 
 // --------- Partie intéraction --------- //
 
 
+app.get('/', (req, res) => {
+
+	res.status(404).send("Nothing to see here.")
+
+});
+
+
 app.get("/img", (req, res) => {
 	const gameID = req.query.gameID;
 	if(fs.existsSync("Frontend/Images/Covers/Wii_Covers-1/" + gameID + ".png")){
-		res.json({img_path: "Frontend/Images/Covers/Wii_Covers-1/" + gameID + ".png"})
+		res.status(200).json({img_path: "Frontend/Images/Covers/Wii_Covers-1/" + gameID + ".png"})
 	} else if(fs.existsSync("Frontend/Images/Covers/Wii_Covers-2/" + gameID + ".png")){
-		res.json({img_path: "Frontend/Images/Covers/Wii_Covers-2/" + gameID + ".png"})
+		res.status(200).json({img_path: "Frontend/Images/Covers/Wii_Covers-2/" + gameID + ".png"})
 	} else {
-		res.json({img_path: "Frontend/Images/Covers/cover_not_found.png"})
+		res.status(200).json({img_path: "Frontend/Images/Covers/cover_not_found.png"})
 	}
 
 })
@@ -45,7 +53,7 @@ app.get("/gamelist", (req, res) => {
 	if(request === 'wish-list') {sql = `SELECT * FROM wiigames INNER JOIN wish_list ON wiigames.id = wish_list.id;`}
 	db.all(sql, (err, data) => {
 		if (err) return console.error("Erreur durant récupération jeux", err.message)
-		res.json(data)
+		res.status(200).json(data)
 	});
 })
 
@@ -54,8 +62,8 @@ app.get("/gamelist", (req, res) => {
 //Fonction qui permet de savoir combien de jeu nous avons
 app.get('/howmanygameowned', (req, res) => {
 	db.get(`SELECT COUNT(*) FROM wiigames WHERE owned = true`, (err, row) => {
-		if (err) return console.error("Erreur lors de la récupération de nombre de jeuz possedés", err.message);
-		res.json({count: row['COUNT(*)']});
+		if (err) return console.error("Erreur lors de la récupération de nombre de jeux possedés", err.message);
+		res.status(200).json({count: row['COUNT(*)']});
 	});
 });
 
@@ -70,9 +78,9 @@ app.get('/jeuxpossedes', (req, res) => {
 			console.error('Erreur lors de l\'exécution de la requête :', err.message);
 		} else {
 			if (row !== undefined && row.owned === 1) {
-				res.json({result: true})
+				res.status(200).json({result: true})
 			} else {
-				res.json({result: false})
+				res.status(200).json({result: false})
 			}
 	}
 	});
@@ -92,7 +100,7 @@ app.get('/ajoutsuppr', (req, res) => {
 				db.run(`UPDATE wiigames SET owned = 0 WHERE id = ?;`, [gameID], (err) => {
 					if (err) return console.error("Error during deleting game owned to database: ", err.message);
 				});
-				res.json({result: true})
+				res.status(200).json({result: true})
 			} else {
 				db.run(`UPDATE wiigames SET owned = 1 WHERE id = ?;`, [gameID], (err) => {
 					if (err) return console.error("Error during inserting game owned to database: ", err.message);
@@ -100,7 +108,7 @@ app.get('/ajoutsuppr', (req, res) => {
 				db.run(`DELETE FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
 					if (err) {console.error('Erreur lors de l\'exécution de la requête :', err.message);}
 				})
-				res.json({result: false})
+				res.status(200).json({result: false})
 			}
 		}
 	});
@@ -122,7 +130,7 @@ app.get('/wishlist', (req, res) => {
 					if (err) {console.error('Erreur lors de l\'exécution de la requête :', err.message);}
 				})
 			}
-			res.json({result: row === undefined})
+			res.status(200).json({result: row === undefined})
 		}
 		
 	});
@@ -133,7 +141,7 @@ app.get('/inwishlist', (req, res) => {
 	db.get(`SELECT id FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) { console.error('Erreur lors de l\'exécution de la requête :', err.message);}
 		else {
-			res.json({result: row === undefined})
+			res.status(200).json({result: row === undefined})
 		}
 	});
 });
