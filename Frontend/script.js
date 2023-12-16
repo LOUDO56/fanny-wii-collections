@@ -71,6 +71,12 @@ document.querySelector(".login").addEventListener("submit", (e) => {
 
 async function isConnected(){
     const token = getCookie("token")
+    if(token !== ""){
+        document.querySelector("#security-mdp").style.display = "none";
+        document.querySelector(".login").remove();
+    } else {
+        document.querySelector(".not-connected").textContent = "Tu n'es pas connecté. Tu ne peux pas voir la liste des jeux."
+    }
     try {
         const reqWiiGames = await fetch(link_db + "/gamelist", {
             headers: {
@@ -82,13 +88,10 @@ async function isConnected(){
         listGames = wiiGames;
         lengame = wiiGames.length;
         showWiiGames(wiiGames, currentRankGames);
-        document.querySelector(".login").remove();
-	document.querySelector("#security-mdp").style.display = "none";
 
     
     } catch (e) {
-        console.log(e)
-        document.querySelector(".not-connected").textContent = "Tu n'es pas connecté. Tu ne peux pas voir la liste des jeux."
+        console.log("Erreur durant récup des jeux wii : " + e)
     }
 
 }
