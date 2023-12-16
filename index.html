@@ -5,6 +5,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="Frontend/script.js" defer></script>
+        <script src="Frontend/jQuery.js" defer></script>
+        <script src="Frontend/cookie.js" defer></script>
         <link rel="stylesheet" href="Frontend/style.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +20,11 @@
             <p class="made-by">Fait avec ❤️ par ton fils</p>
             <p id="how-may-game-owned"></p>
             <p id="security-mdp">Pour des raisons de sécurité, il faut que tu tapes ton mot de passe avant de pouvoir intéragir.</p>
-            <input type="password" name="mdp" class="mdp" id="mdp-value" placeholder="Tape ton mot de passe">
+            <form action="/" class="login" method="post">
+                <input type="password" name="passwd" class="mdp" id="mdp-value" placeholder="Tape ton mot de passe">
+                <button class="submit">Connexion</button>
+            </form>
+            <p class="bad-passwd"></p>
         </header>
         <img src="Frontend/Images/Deco/Mario_left.png" alt="Mario galaxie gauche" class="img-left">
         <img src="Frontend/Images/Deco/Link_right.png" alt="Link totk" class="img-right">
@@ -43,6 +49,7 @@
             <div id="page-indicator"></div>
             <div id="games-list" wii-games-container></div>
             <div id="no-result"></div>
+            <div class="not-connected"></div>
             <template wii-games-template>
                 <div class="game-box">
                     <div class="game-header">

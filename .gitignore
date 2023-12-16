@@ -1,11 +1,4 @@
-node_modules
-Wii List Prototype.pdf
-mdp.env
-wiitdb.xml
-fff.text
-phpMyAdmin.url
-id_mysql.txt
+Backend/node_modules
+Backend/mdp.env
+Backend/wiitdb.xml
 backup_donnee
-index2.html
-Frontend/script2.js
-wiigames2.db

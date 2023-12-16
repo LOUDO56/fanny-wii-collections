@@ -50,6 +50,22 @@ header{
     margin-bottom: 5px;
 }
 
+.bad-passwd{
+    display: none;
+    font-size: 17px;
+    color: red;
+    margin: 20px 0;
+}
+
+
+.connected{
+    display: none;
+    font-size: 30px;
+    color: green;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
 .made-by{
     font-size: 17px;
     margin-bottom: 15px;
@@ -100,6 +116,13 @@ header{
 
 /* Liste des jeux */
 
+
+.not-connected{
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 23px;
+    color: #d64646;
+}
 
 .filter{
     font-weight: bold;
