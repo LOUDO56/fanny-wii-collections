@@ -57,13 +57,15 @@ header{
     margin: 20px 0;
 }
 
-
-.connected{
-    display: none;
-    font-size: 30px;
-    color: green;
-    font-weight: bold;
-    margin: 20px 0;
+.submit{
+    margin-bottom: 15px;
+    font-size: 15px;
+    padding: 5px 10px;
+    background-color: #7ab96e;
+    border: none;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    cursor: pointer;
 }
 
 .made-by{

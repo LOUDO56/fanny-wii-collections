@@ -40,7 +40,7 @@ function getCookie(cname) {
 }
 
 // Savoir si je suis sur localhost ou non
-if (!window.location.href.includes("fannywiicollec")) {
+if (!window.location.href.includes("fanny-wii-collections")) {
     document.querySelector(".dev-mode").textContent = "Mode développeur activé";
     link_db = "http://192.168.1.41:4000";
 } else {
