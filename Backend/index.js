@@ -47,7 +47,7 @@ app.get('/', (req, res) => {
 app.post("/login", (req, res) => {
     const password = req.body.passwd;
     if(password != process.env.MDP) {
-		return res.status(401).send({result: false});
+		return res.send({result: false});
 	};
     const token = jwt.sign({"password": password}, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "120d" });
     return res.status(200).send({
