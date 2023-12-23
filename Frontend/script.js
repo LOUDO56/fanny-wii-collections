@@ -72,6 +72,7 @@ document.querySelector(".login").addEventListener("submit", (e) => {
 async function isConnected(){
     const token = getCookie("token")
     if(token !== ""){
+        document.querySelector(".coin-container").style.display = "flex";
         document.querySelector("#security-mdp").style.display = "none";
         document.querySelector(".login").remove();
     } else {
@@ -83,7 +84,6 @@ async function isConnected(){
                 "authorization" : "Barer " + token
             }
         })
-
         const wiiGames = await reqWiiGames.json();
         listGames = wiiGames;
         lengame = wiiGames.length;
@@ -380,9 +380,14 @@ function showWiiGames(Games, currentIndex, searchText) {
             }
 
             currentIndexPage++;
+
         }
     }
     readMoreButtonEvent();
+
+    document.getElementById("button-haut-page").style.visibility = "visible";
+    document.getElementById("page-indicator").style.visibility = "visible";
+    document.querySelector(".coin-container").style.display = "none";
 
     // Évenement pour détecter si on peut avancer, reculer d'une page
     const buttonNextPage = document.getElementById("next-page");
@@ -480,6 +485,12 @@ document.getElementById("previous-page").addEventListener("click", () => {
 
 document.getElementById("filter").addEventListener("change", (e) => {
     filter = e.target.value;
+    document.querySelector(".coin-container").style.display = "flex";
+    document.querySelector(".pageSelect button").style.visibility = "hidden";
+    document.getElementById("previous-page").style.visibility = "hidden";
+    document.getElementById("next-page").style.visibility = "hidden";
+    document.getElementById("page-indicator").style.visibility = "hidden";
+    document.getElementById("button-haut-page").style.visibility = "hidden";
     const gamesPage = document
         .getElementById("games-list")
         .querySelectorAll(".game-box");
@@ -489,7 +500,7 @@ document.getElementById("filter").addEventListener("change", (e) => {
 
     fetch(link_db + "/gamelist?filter=" + filter, {
         headers: {
-            "authorization" : "Barer " + token
+            "authorization" : "Barer " + getCookie("token")
         }
     })
         .then((resp) => {

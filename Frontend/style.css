@@ -36,6 +36,18 @@ main {
 }
 
 
+.coin-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15em;
+    display: none;
+}
+
+
+.coin-loading{
+    width: 50px;
+}
 
 
 
@@ -331,6 +343,7 @@ header{
     padding: 10px;
     border: 2px solid black;
     margin-bottom: 20px;
+    visibility: hidden;
 }
 
 @media screen and (max-width: 1790px){
@@ -362,6 +375,12 @@ header{
 
 @media screen and (max-width: 582px){
 
+    .coin-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10em;
+    }
 
     .game-little-info{
         display: flex;
