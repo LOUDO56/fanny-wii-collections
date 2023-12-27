@@ -12,6 +12,7 @@ const app = express();
 const { rateLimit } = require('express-rate-limit')
 require('dotenv').config({path: 'mdp.env'})
 const port = 4000;
+const cron = require('node-cron');
 
 let db = new sqlite3.Database('wiigames.db')
 
@@ -36,6 +37,28 @@ const addRemLimit = rateLimit({
 	windowMs: 5000,
 	max: 10
 })
+
+// Backup Régulier tous les mois
+cron.schedule("0 0 1 * *", () => {
+	// Reset si il y a plus de 5 backups
+	fs.readdir("db_backup", (err, files) => {
+		if(err) console.log("Erreur durant reset backup : " + err);
+		if(files.length == 5){
+			for (const file of files) {
+				fs.unlink("db_backup/" + file, (err) => {
+					if (err) throw err;
+				});
+			}
+		}
+	});
+	const backupDate = new Date();
+	const fullDate = backupDate.getDate() + "-" + (backupDate.getMonth() + 1) + "-" + backupDate.getFullYear();
+	fs.copyFile("wiigames.db", "db_backup/wiigames-" + fullDate + ".db", (err) =>{
+		if(err) console.log("Erreur durant backup : " + err)
+	});
+
+})
+
 
 // --------- Partie intéraction --------- //
 
