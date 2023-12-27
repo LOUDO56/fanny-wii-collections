@@ -42,7 +42,7 @@ function getCookie(cname) {
 // Savoir si je suis sur localhost ou non
 if (!window.location.href.includes("fanny-wii-collections")) {
     document.querySelector(".dev-mode").textContent = "Mode développeur activé";
-    link_db = "http://192.168.1.41:4000";
+    link_db = "http://192.168.1.14:4000";
 } else {
     link_db = 'https://fannywiicollec.ddns.net';
 }
@@ -72,13 +72,13 @@ document.querySelector(".login").addEventListener("submit", (e) => {
 async function isConnected(){
     const token = getCookie("token")
     if(token !== ""){
-        document.querySelector(".coin-container").style.display = "flex";
         document.querySelector("#security-mdp").style.display = "none";
         document.querySelector(".login").remove();
     } else {
         document.querySelector(".not-connected").textContent = "Tu n'es pas connecté. Tu ne peux pas voir la liste des jeux."
     }
     try {
+        document.querySelector(".coin-container").style.display = "flex";
         const reqWiiGames = await fetch(link_db + "/gamelist", {
             headers: {
                 "authorization" : "Barer " + token
@@ -88,10 +88,30 @@ async function isConnected(){
         listGames = wiiGames;
         lengame = wiiGames.length;
         showWiiGames(wiiGames, currentRankGames);
+        fetch(link_db + `/howmanygameowned`, {
+            headers: {
+                "authorization" : "Barer " + token
+            }
+        })
+            .then((resp) => {
+                return resp.json();
+            })
+    
+            .then((data) => {
+                howManyGameOwned = data.count;
+                document.getElementById("how-may-game-owned").textContent =
+                    "J'ai " +
+                    howManyGameOwned +
+                    " jeux sur " +
+                    lengame +
+                    " en tout";
+            });
 
     
     } catch (e) {
+        document.querySelector(".coin-container").style.display = "none";
         console.log("Erreur durant récup des jeux wii : " + e)
+        document.querySelector(".not-connected").textContent = "Le serveur ne répond pas. Il est peut être hors-service."
     }
 
 }
@@ -102,24 +122,6 @@ function showWiiGames(Games, currentIndex, searchText) {
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
     let howManyGameOwned;
     const token = getCookie("token")
-    fetch(link_db + `/howmanygameowned`, {
-        headers: {
-            "authorization" : "Barer " + token
-        }
-    })
-        .then((resp) => {
-            return resp.json();
-        })
-
-        .then((data) => {
-            howManyGameOwned = data.count;
-            document.getElementById("how-may-game-owned").textContent =
-                "J'ai " +
-                howManyGameOwned +
-                " jeux sur " +
-                lengame +
-                " en tout";
-        });
 
     // Filtre de recherche
     if (searchText !== undefined) {
