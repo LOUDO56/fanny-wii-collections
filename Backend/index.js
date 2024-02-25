@@ -27,17 +27,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const authenticateToken = require("./middleware.js")
 
-
-const RetreiveGameLimiter = rateLimit({
-	windowMs: 5000,
-	max: 3,
-})
-
-const addRemLimit = rateLimit({
-	windowMs: 5000,
-	max: 10
-})
-
 // Backup Régulier tous les mois
 cron.schedule("0 0 1 * *", () => {
 	// Reset si il y a plus de 5 backups
@@ -85,12 +74,12 @@ app.get("/getToken", (req, res) => {
 
 
 //Fonction principale pour retourner les jeux
-app.get("/gamelist", authenticateToken, RetreiveGameLimiter , (req, res) => {
+app.get("/gamelist", authenticateToken, (req, res) => {
 	const request = req.query.filter;
 	let sql = `SELECT * FROM wiigames ORDER BY title;`
 	if(request === 'games-owned') {sql = `SELECT * FROM wiigames WHERE owned = 1 ORDER BY title;`}
 	else if(request === 'games-not-owned') {sql = `SELECT * FROM wiigames WHERE owned = 0 ORDER BY title;`}
-	else if(request === 'wish-list') {sql = `SELECT * FROM wiigames INNER JOIN wish_list ON wiigames.id = wish_list.id;`}
+	else if(request === 'wish-list') {sql = `SELECT * FROM wiigames WHERE wish = 1 ORDER BY title;`}
 	db.all(sql, (err, data) => {
 		if (err) return console.error("Erreur durant récupération jeux", err.message);
 		res.status(200).json(data);
@@ -110,7 +99,7 @@ app.get('/howmanygameowned', authenticateToken, (req, res) => {
 
 
 // Fonction qui permet d'ajouter un jeu ou le supprimer
-app.get('/ajoutsuppr', authenticateToken, addRemLimit, (req, res) => {
+app.get('/ajoutsuppr', authenticateToken, (req, res) => {
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
 	db.get(`SELECT owned FROM wiigames WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) {
@@ -125,7 +114,7 @@ app.get('/ajoutsuppr', authenticateToken, addRemLimit, (req, res) => {
 				db.run(`UPDATE wiigames SET owned = 1 WHERE id = ?;`, [gameID], (err) => {
 					if (err) return console.error("Error during inserting game owned to database: ", err.message);
 				});
-				db.run(`DELETE FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
+				db.run(`UPDATE wiigames SET wish = 0 WHERE id = ?;`, [gameID], (err, row) => {
 					if (err) {console.error('Erreur lors de l\'exécution de la requête :', err.message);}
 				})
 				res.status(200).json({result: false})
@@ -135,32 +124,22 @@ app.get('/ajoutsuppr', authenticateToken, addRemLimit, (req, res) => {
 });
 
 
-app.get('/wishlist', authenticateToken, RetreiveGameLimiter, (req, res) => {
+app.get('/wishlist', authenticateToken, (req, res) => {
 	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
-	db.get(`SELECT id FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
+	db.get(`SELECT wish FROM wiigames WHERE id = ?;`, [gameID], (err, row) => {
 		if (err) { console.error('Erreur lors de l\'exécution de la requête :', err.message);}
 		else {
-			if(row === undefined){
-				db.run(`INSERT INTO wish_list (id) VALUES (?);`, [gameID], (err, row) => {
+			if(row.wish === 0){
+				db.run(`UPDATE wiigames SET wish = 1 WHERE id = ?;`, [gameID], (err, row) => {
 					if (err) {console.error('Erreur lors de l\'exécution de la requête :', err.message);}
 				})
 			} else {
-				db.run(`DELETE FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
+				db.run(`UPDATE wiigames SET wish = 0 WHERE id = ?;`, [gameID], (err, row) => {
 					if (err) {console.error('Erreur lors de l\'exécution de la requête :', err.message);}
 				})
 			}
-			res.status(200).json({result: row === undefined})
+			res.status(200).json({result: row.wish === 0})
 		}
 		
-	});
-});
-
-app.get('/inwishlist', authenticateToken, (req, res) => {
-	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
-	db.get(`SELECT id FROM wish_list WHERE id = ?;`, [gameID], (err, row) => {
-		if (err) { console.error('Erreur lors de l\'exécution de la requête :', err.message);}
-		else {
-			res.status(200).json({result: row === undefined})
-		}
 	});
 });
