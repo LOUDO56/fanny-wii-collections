@@ -1,4 +1,5 @@
 Backend/node_modules
 Backend/mdp.env
 Backend/wiitdb.xml
+Frontend/Images/Covers/*.png
 backup_donnee

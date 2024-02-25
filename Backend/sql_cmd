@@ -1,9 +1,0 @@
-ALTER TABLE wiigames
-ADD wish tinyint(1);
-
-UPDATE wiigames
-SET wish = 0;
-
-UPDATE wiigames
-SET wish = 1
-WHERE id IN (SELECT id FROM wish_list);
