@@ -83,28 +83,14 @@ app.get("/getToken", (req, res) => {
     res.json(req.cookies)
 });
 
-app.get("/img", authenticateToken, (req, res) => {
-	const gameID = req.query.gameID;
-	const in_local = req.query.inLocal;
-	let path = "/var/www/html/wii-collec-local/Frontend";
-	if(fs.existsSync(path + "/Images/Covers/Wii_Covers-1/" + gameID + ".png")){
-		res.status(200).json({img_path: "Frontend/Images/Covers/Wii_Covers-1/" + gameID + ".png"});
-	} else if(fs.existsSync(path + "/Images/Covers/Wii_Covers-2/" + gameID + ".png")){
-		res.status(200).json({img_path: "Frontend/Images/Covers/Wii_Covers-2/" + gameID + ".png"});
-	} else {
-		res.status(200).json({img_path: "Frontend/Images/Covers/cover_not_found.png"});
-	}
-
-})
-
 
 //Fonction principale pour retourner les jeux
 app.get("/gamelist", authenticateToken, RetreiveGameLimiter , (req, res) => {
 	const request = req.query.filter;
 	let sql = `SELECT * FROM wiigames ORDER BY title;`
-	if(request === 'games-owned') {sql = `SELECT * FROM wiigames WHERE owned = true ORDER BY title;`}
-	if(request === 'games-not-owned') {sql = `SELECT * FROM wiigames WHERE owned = false ORDER BY title;`}
-	if(request === 'wish-list') {sql = `SELECT * FROM wiigames INNER JOIN wish_list ON wiigames.id = wish_list.id;`}
+	if(request === 'games-owned') {sql = `SELECT * FROM wiigames WHERE owned = 1 ORDER BY title;`}
+	else if(request === 'games-not-owned') {sql = `SELECT * FROM wiigames WHERE owned = 0 ORDER BY title;`}
+	else if(request === 'wish-list') {sql = `SELECT * FROM wiigames INNER JOIN wish_list ON wiigames.id = wish_list.id;`}
 	db.all(sql, (err, data) => {
 		if (err) return console.error("Erreur durant récupération jeux", err.message);
 		res.status(200).json(data);
@@ -115,28 +101,9 @@ app.get("/gamelist", authenticateToken, RetreiveGameLimiter , (req, res) => {
 
 //Fonction qui permet de savoir combien de jeu nous avons
 app.get('/howmanygameowned', authenticateToken, (req, res) => {
-	db.get(`SELECT COUNT(*) FROM wiigames WHERE owned = true`, (err, row) => {
+	db.get(`SELECT COUNT(*) FROM wiigames WHERE owned = 1`, (err, row) => {
 		if (err) return console.error("Erreur lors de la récupération de nombre de jeux possedés", err.message);
 		res.status(200).json({count: row['COUNT(*)']});
-	});
-});
-
-
-
-
-// Fonction qui permet de vérifier si le jeu est possédé ou non pour l'affichage HTML
-app.get('/jeuxpossedes', authenticateToken, (req, res) => {
-	const gameID = req.query.gameID; // Récupérer l'ID du jeu depuis la requête
-	db.get(`SELECT owned FROM wiigames WHERE id = ?;`, [gameID], (err, row) => {
-		if (err) {
-			console.error('Erreur lors de l\'exécution de la requête :', err.message);
-		} else {
-			if (row !== undefined && row.owned === 1) {
-				res.status(200).json({result: true})
-			} else {
-				res.status(200).json({result: false})
-			}
-	}
 	});
 });
 
