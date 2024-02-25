@@ -39,13 +39,9 @@ function getCookie(cname) {
     return "";
 }
 
-// Savoir si je suis sur localhost ou non
-if (!window.location.href.includes("fanny-wii-collections") || window.location.href.includes("file")) {
-    document.querySelector(".dev-mode").textContent = "Mode développeur activé";
-    link_db = "http://localhost:4000";
-} else {
-    link_db = 'https://fannywiicollec.ddns.net';
-}
+
+link_db = 'https://fannywiicollec.ddns.net';
+
 
 document.querySelector(".login").addEventListener("submit", (e) => {
     e.preventDefault();
