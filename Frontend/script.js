@@ -71,6 +71,7 @@ async function isConnected(){
         document.querySelector("#security-mdp").style.display = "none";
         document.querySelector(".login").remove();
     } else {
+        document.querySelector(".coin-container").style.display = "none";
         document.querySelector(".not-connected").textContent = "Tu n'es pas connecté. Tu ne peux pas voir la liste des jeux."
         return;
     }
