@@ -22,9 +22,9 @@ If you want to use it in your own, just download the source code in ZIP file and
   ![image](https://github.com/LOUDO56/fanny-wii-collections/assets/117168736/454327ad-c0b4-420f-9f43-a13606a9d75e)
   
 - Type `npm install package.json` in your terminal
-- Edit `index.html`, remove line 17, 18, 19 and 20
-- Edit `script.js`, go to line 19, and remove all `link_db` instead of `const link_db = 'http://localhost:4000'`
-- Go to your terminal and type `node index.js`
+- type `node index.js` to launch the server
+- Edit `index.html`, remove line 19 and 20
+- Edit `script.js`, go to line 43, and change the server link to `http://localhost:4000`
 - Open `index.html` file
 - Kaboom! Fully interactive wii games list :)
 
