@@ -40,7 +40,7 @@ function getCookie(cname) {
 }
 
 
-link_db = 'http://localhost:4000';
+link_db = 'https://fannywiicollec.ddns.net';
 
 
 document.querySelector(".login").addEventListener("submit", (e) => {

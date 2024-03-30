@@ -22,7 +22,7 @@ app.listen(port, () => {
 });
 
 var corsOptions = {
-	origin: 'http://localhost:4000',
+	origin: 'https://fannywiicollec.ddns.net,http://localhost:4000',
 	optionsSuccessStatus: 200
   }
 
