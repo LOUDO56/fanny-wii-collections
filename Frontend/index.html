@@ -39,6 +39,7 @@
                     <option value="games-owned">Jeux possédés</option>
                     <option value="games-not-owned">Jeux non possédés</option>
                     <option value="wish-list">Liste de souhait</option>
+                    <option value="ajout-recent">Ajout récent</option>
                 </select>
             </div>
             <p class="dev-mode"></p>
@@ -56,12 +57,12 @@
             <template wii-games-template>
                 <div class="game-box">
                     <div class="game-header">
-                        <div class="img-cover"><img wii-game-cover/></div>
+                        <div class="img-cover"><img src="" wii-game-cover/></div>
                         <div class="game-information">
                             <div class="game-information-header">
                                 <p class="game-title" wii-game-title></p>
                                 <div>
-                                    <p class="game-is-owned">Dans la collection <p wii-game-owned class="loading yes-no">?</p></p>
+                                    <p class="game-is-owned">Dans la collection <p wii-game-owned class="yes-no"></p></p>
                                 </div>
                             </div>
                             <div class="game-information-body">
@@ -80,7 +81,8 @@
                     <hr>
                     <div class="game-footer">
                         <div class="button-action">
-                            <button wii-game-button-collection class="loading add-rem">Chargement...</button>
+                            <button wii-game-button-collection class="add-rem"></button>
+                            <p class="owned-when" wii-game-when-owned></p>
                         </div>
                         <div class="button-action">
                             <button class="button-wishlist" wii-game-button-wishlist></button>

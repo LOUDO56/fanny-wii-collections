@@ -13,6 +13,7 @@ const { rateLimit } = require('express-rate-limit')
 require('dotenv').config({path: 'mdp.env'})
 const port = 4000;
 const cron = require('node-cron');
+const moment = require('moment');
 
 let db = new sqlite3.Database('wiigames.db')
 
@@ -21,7 +22,7 @@ app.listen(port, () => {
 });
 
 var corsOptions = {
-	origin: 'https://fannywiicollec.ddns.net',
+	origin: 'http://localhost:4000',
 	optionsSuccessStatus: 200
   }
 
@@ -81,10 +82,11 @@ app.get("/getToken", (req, res) => {
 //Fonction principale pour retourner les jeux
 app.get("/gamelist", authenticateToken, (req, res) => {
 	const request = req.query.filter;
-	let sql = `SELECT * FROM wiigames ORDER BY title;`
-	if(request === 'games-owned') {sql = `SELECT * FROM wiigames WHERE owned = 1 ORDER BY title;`}
-	else if(request === 'games-not-owned') {sql = `SELECT * FROM wiigames WHERE owned = 0 ORDER BY title;`}
-	else if(request === 'wish-list') {sql = `SELECT * FROM wiigames WHERE wish = 1 ORDER BY title;`}
+	let sql = `SELECT *, STRFTIME('%d/%m/%Y à %H:%M:%S', owned_when) as owned_when FROM wiigames ORDER BY title;`
+	if(request === 'games-owned') {sql = `SELECT *, STRFTIME('%d/%m/%Y à %H:%M:%S', owned_when) as owned_when FROM wiigames WHERE owned = 1 ORDER BY title;`}
+	else if(request === 'games-not-owned') {sql = `SELECT *, STRFTIME('%d/%m/%Y à %H:%M:%S', owned_when) as owned_when FROM wiigames WHERE owned = 0 ORDER BY title;`}
+	else if(request === 'wish-list') {sql = `SELECT *, STRFTIME('%d/%m/%Y à %H:%M:%S', owned_when) as owned_when FROM wiigames WHERE wish = 1 ORDER BY title;`}
+	else if(request === 'ajout-recent') {sql = `SELECT *, STRFTIME('%d/%m/%Y à %H:%M:%S', owned_when) as owned_when FROM wiigames WHERE owned = 1 AND owned_when NOT NULL ORDER BY owned_when DESC;`}
 	db.all(sql, (err, data) => {
 		if (err) return console.error("Erreur durant récupération jeux", err.message);
 		res.status(200).json(data);
@@ -117,6 +119,10 @@ app.get('/ajoutsuppr', authenticateToken, (req, res) => {
 				res.status(200).json({result: true})
 			} else {
 				db.run(`UPDATE wiigames SET owned = 1 WHERE id = ?;`, [gameID], (err) => {
+					if (err) return console.error("Error during inserting game owned to database: ", err.message);
+				});
+				let date = moment(new Date().toLocaleString('fr-FR', { timeZone: 'UTC' }), "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+				db.run(`UPDATE wiigames SET owned_when = ? WHERE id = ?;`, [date , gameID], (err) => {
 					if (err) return console.error("Error during inserting game owned to database: ", err.message);
 				});
 				db.run(`UPDATE wiigames SET wish = 0 WHERE id = ?;`, [gameID], (err, row) => {

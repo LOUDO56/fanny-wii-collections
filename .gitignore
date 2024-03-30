@@ -2,3 +2,4 @@ Backend/node_modules
 Backend/mdp.env
 Frontend/Images/Covers/*.png
 backup_donnee
+Backend/db_backup

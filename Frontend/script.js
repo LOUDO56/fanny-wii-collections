@@ -40,7 +40,7 @@ function getCookie(cname) {
 }
 
 
-link_db = 'https://fannywiicollec.ddns.net';
+link_db = 'http://localhost:4000';
 
 
 document.querySelector(".login").addEventListener("submit", (e) => {
@@ -126,6 +126,19 @@ async function isConnected(){
 }
 
 isConnected()
+
+async function loadCover(gameCover, imgLink){
+    var img = new Image();
+    gameCover.src = imgLink
+    gameCover.src = "Images/Covers/cover_loading.png";
+    const res = await fetch(imgLink);
+    if(res.status == 200){
+        gameCover.src = imgLink;
+    } else {
+        gameCover.src = "Images/Covers/cover_not_found.png";
+    }
+    
+}
     
 function showWiiGames(Games, currentIndex, searchText) {
     let currentIndexPage = 0; // c'est pour le synopsis trop long pour faire les changemets sur la bonne div\
@@ -191,9 +204,8 @@ function showWiiGames(Games, currentIndex, searchText) {
             const gameID = Games[i].id;
             gameCover.alt = "Games ID " + Games[i].id;
 
-            gameCover.src = "Images/Covers/cover_loading.png";
-            gameCover.src = "Images/Covers/" + gameID + ".png";
-
+            //gameCover.src = "Images/Covers/" + gameID + ".png";
+	        loadCover(gameCover, "Images/Covers/" + gameID + ".png")
 
 
             //définition du titre
@@ -265,6 +277,7 @@ function showWiiGames(Games, currentIndex, searchText) {
             const wishListButton = templateGameBox.querySelector(
                 "[wii-game-button-wishlist]"
             );
+            const textWhenOwned = templateGameBox.querySelector('[wii-game-when-owned]')
 
             if (Games[i].owned === 0) {
                 gameButton.classList.toggle("add");
@@ -279,6 +292,11 @@ function showWiiGames(Games, currentIndex, searchText) {
                     "➖ Supprimer de ma collection";
                 gameOwned.classList.toggle("oui");
                 gameOwned.innerHTML = "OUI";
+                let date = Games[i].owned_when;
+                if(date === null){
+                    date = "?"
+                }
+                textWhenOwned.textContent = "Ajouté le " + date;
             }
 
             if (Games[i].wish === 0) {
@@ -338,6 +356,7 @@ function showWiiGames(Games, currentIndex, searchText) {
                             gameOwned.classList.add("no");
                             gameOwned.innerHTML = "NON";
                             Games[i].owned = 0;
+                            textWhenOwned.textContent = "";
                             howManyGameOwned--;
                         }
                         document.getElementById(
