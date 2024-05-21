@@ -1,4 +1,4 @@
-# fanny-wii-collections
+# wii-collection-management
 This projects is for my mother who is collectionning all the Wii Games from Europe<br/>
 **This project is only in French, all translations are up to you.**
 
